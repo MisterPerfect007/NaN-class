@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nan_class/features/home/presenter/pages/home.dart';
+import 'package:nan_class/ui/colors/app_colors.dart';
 
+import 'features/courses/presenter/pages/courses_page.dart';
+import 'features/home/presenter/widgets/bottomNavigationBar/custtom_navigation_bar.dart';
 import 'features/loginAndRegister/presenter/pages/login.dart';
 
 void main() {
@@ -19,7 +22,63 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Login(),
+      home: const Root(),
+    );
+  }
+}
+
+class Root extends StatefulWidget {
+  const Root({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<Root> createState() => _RootState();
+}
+
+class _RootState extends State<Root> {
+  late PageController pageController;
+
+  int currentIndex = 0;
+
+  void changeIndex(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+    pageController.animateToPage(index,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.fastLinearToSlowEaseIn);
+  }
+
+  @override
+  void initState() {
+    pageController = PageController();
+    super.initState();
+  }
+
+  @override
+  void dispose(){
+    pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: PageView(
+        controller: pageController,
+        onPageChanged: changeIndex,
+        padEnds: false,
+        physics: const BouncingScrollPhysics(),
+        children: const [
+          Home(),
+          CoursesPage()
+        ],
+      ),
+      bottomNavigationBar: CustomNavigationBar(
+        changeIndex: changeIndex,
+        currentIndex: currentIndex,
+      ),
     );
   }
 }

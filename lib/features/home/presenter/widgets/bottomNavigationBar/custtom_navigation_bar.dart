@@ -5,8 +5,10 @@ import '../../../../../ui/svg_icons/svg_icons.dart';
 import 'navigation_bar_item.dart';
 
 class CustomNavigationBar extends StatefulWidget {
+  final Function(int) changeIndex;
+  final int currentIndex;
   const CustomNavigationBar({
-    Key? key,
+    Key? key, required this.changeIndex, required this.currentIndex,
   }) : super(key: key);
 
   @override
@@ -14,13 +16,9 @@ class CustomNavigationBar extends StatefulWidget {
 }
 
 class _CustomNavigationBarState extends State<CustomNavigationBar> {
-  int currentIndex = 0;
+  
 
-  void changeIndex(int index) {
-    setState(() {
-      currentIndex = index;
-    });
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -34,30 +32,30 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
           NavigationBarItem(
             icon: SvgIcons.homeAlt,
             text: 'Home',
-            changeIndex: changeIndex,
+            changeIndex: widget.changeIndex,
             index: 0,
-            currentIndex: currentIndex,
+            currentIndex: widget.currentIndex,
           ),
           NavigationBarItem(
             icon: SvgIcons.course,
             text: 'Courses',
-            changeIndex: changeIndex,
+            changeIndex: widget.changeIndex,
             index: 1,
-            currentIndex: currentIndex,
+            currentIndex: widget.currentIndex,
           ),
           NavigationBarItem(
             icon: SvgIcons.thinking,
             text: 'Quizs',
-            changeIndex: changeIndex,
+            changeIndex: widget.changeIndex,
             index: 2,
-            currentIndex: currentIndex,
+            currentIndex: widget.currentIndex,
           ),
           NavigationBarItem(
             icon: SvgIcons.project,
             text: 'Projects',
             index: 3,
-            currentIndex: currentIndex,
-            changeIndex: changeIndex,
+            currentIndex: widget.currentIndex,
+            changeIndex: widget.changeIndex,
           ),
         ],
       ),

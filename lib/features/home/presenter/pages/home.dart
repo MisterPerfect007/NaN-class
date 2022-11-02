@@ -14,7 +14,6 @@ class Home extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(39, 41, 53, 1),
       appBar: buildAppBar(),
-      bottomNavigationBar: const CustomNavigationBar(),
       body: HomeBody(size: size),
     );
   }
@@ -91,6 +90,8 @@ class HomeBody extends StatelessWidget {
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 10,
                 children: [
+                  PointCard(),
+                  PointCard(),
                   PointCard(),
                   PointCard(),
                   PointCard(),
