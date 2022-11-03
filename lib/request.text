@@ -1,2 +1,7 @@
+GET http://192.168.88.87:4000/api/mobile/getCourses
+auth: 116420318969971436809
+
+
+
 GET http://192.168.88.87:4000/api/mobile/getUser
 auth: 116420318969971436809

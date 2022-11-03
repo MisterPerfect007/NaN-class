@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nan_class/features/home/presenter/bloc/home_bloc.dart';
 import 'package:nan_class/features/home/presenter/pages/home.dart';
 import 'package:nan_class/ui/colors/app_colors.dart';
 
@@ -22,7 +24,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Root(),
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider<HomeBloc>(create: (context) => HomeBloc())
+        ], 
+        child: const Root(),)
+      
     );
   }
 }

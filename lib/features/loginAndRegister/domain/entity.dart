@@ -15,14 +15,14 @@ class User extends Equatable {
   final String? pays;
   final SpecialityModel? speciality;
   final String? status;
-  final int? percentReduction;
+  final double? percentReduction;
   final bool? accountDeleted;
   final String? matricule;
   final String? googleId;
   final AccountingModel? accounting;
-  final int? ratingsPoints;
-  final int? coursesPoints;
-  final int? projectsPoints;
+  final double? ratingsPoints;
+  final double? coursesPoints;
+  final double? projectsPoints;
 
   const User({
     this.id,
