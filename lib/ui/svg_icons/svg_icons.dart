@@ -21,6 +21,7 @@ enum SvgIcons {
   project,
   thinking,
   course,
+  circleChevronRight,
 }
 
 Map<SvgIcons, String> svgLink = {
@@ -43,6 +44,7 @@ Map<SvgIcons, String> svgLink = {
   SvgIcons.project: 'assets/svg/project.svg',
   SvgIcons.thinking: 'assets/svg/thinking-problem.svg',
   SvgIcons.course: 'assets/svg/publish-course.svg',
+  SvgIcons.circleChevronRight: 'assets/svg/circle-chevron-right.svg',
 };
 
 class SvgIcon extends StatelessWidget {

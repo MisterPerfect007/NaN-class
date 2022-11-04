@@ -7,6 +7,7 @@ import 'package:nan_class/features/home/data/datasources/user_remote_data_source
 import 'package:nan_class/ui/colors/app_colors.dart';
 
 import '../../../../ui/svg_icons/svg_icons.dart';
+import '../../../courses/data/datasources/courses_remote_data_source.dart';
 import '../../../loginAndRegister/domain/entity.dart';
 import '../../../loginAndRegister/utils/google_auth.dart';
 import '../bloc/home_bloc.dart';
@@ -94,7 +95,7 @@ class LoadedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(user.speciality?.id);
+    // print(user.speciality?.id);
     return SingleChildScrollView(
       child: Padding(
         padding:
@@ -103,10 +104,19 @@ class LoadedWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(
-                  "Hello, ",
-                  style: TextStyle(
-                      fontSize: 18, color: Colors.white.withOpacity(0.6)),
+                GestureDetector(
+                  onTap: ()async {
+                    final courses = await getCourcesRemoteDataSource("116420318969971436809");
+                    courses.fold(
+                      (l) => print(l), 
+                      (r) => print("${r.first.month} = ${r.first.courses.first.toJson()}"), 
+                      );
+                  },
+                  child: Text(
+                    "Hello, ",
+                    style: TextStyle(
+                        fontSize: 18, color: Colors.white.withOpacity(0.6)),
+                  ),
                 ),
                 Text(
                   user.login ?? '',

@@ -4,6 +4,7 @@ import 'package:nan_class/features/home/presenter/bloc/home_bloc.dart';
 import 'package:nan_class/features/home/presenter/pages/home.dart';
 import 'package:nan_class/ui/colors/app_colors.dart';
 
+import 'features/courses/presenter/pages/bloc/courses_bloc.dart';
 import 'features/courses/presenter/pages/courses_page.dart';
 import 'features/home/presenter/widgets/bottomNavigationBar/custtom_navigation_bar.dart';
 import 'features/loginAndRegister/presenter/pages/login.dart';
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
       ),
       home: MultiBlocProvider(
         providers: [
-          BlocProvider<HomeBloc>(create: (context) => HomeBloc())
+          BlocProvider<HomeBloc>(create: (context) => HomeBloc()),
+          BlocProvider<CoursesBloc>(create: (context) => CoursesBloc()),
         ], 
         child: const Root(),)
       
