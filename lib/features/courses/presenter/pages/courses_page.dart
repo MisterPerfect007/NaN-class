@@ -5,7 +5,7 @@ import 'package:nan_class/ui/colors/app_colors.dart';
 import 'package:nan_class/ui/svg_icons/svg_icons.dart';
 
 import '../../../../core/widgets/default_app_bar.dart';
-import 'bloc/courses_bloc.dart';
+import '../bloc/courses_bloc.dart';
 
 class CoursesPage extends StatelessWidget {
   const CoursesPage({super.key});
@@ -26,15 +26,21 @@ class CoursesPage extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             child: BlocBuilder<CoursesBloc, CoursesState>(
               builder: (context, state) {
-                if(state is CoursesInitial || state is CoursesLoading){
-                  return const Center(child: CircularProgressIndicator(),);
-                }else if(state is CoursesLoaded){
-                  print(state.courses.toString());
-                  return const Center(child: Text("Loaded"),);
-                }else if(state is CoursesFailed){
-                  print(state.errorType);
-                  return const Center(child: Text("Failed"),);
-                }
+                // if (state is CoursesInitial || state is CoursesLoading) {
+                //   return const Center(
+                //     child: CircularProgressIndicator(),
+                //   );
+                // } else if (state is CoursesLoaded) {
+                //   print(state.courses.toString());
+                //   return const Center(
+                //     child: Text("Loaded"),
+                //   );
+                // } else if (state is CoursesFailed) {
+                //   print(state.errorType);
+                //   return const Center(
+                //     child: Text("Failed"),
+                //   );
+                // }
                 return Column(
                   children: [
                     Container(
