@@ -106,15 +106,19 @@ class SocialMediaFormField extends StatelessWidget {
 }
 
 Future googleLoginAndRegister() async {
+  print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
   final googleSignIn = GoogleSignIn(
       serverClientId:
           '342579524909-ip6rf92vnse3n7bfid8e7s4aud2vajf2.apps.googleusercontent.com');
+  await googleSignIn.signOut();
   final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+  print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n" * 2);
+  // print(googleUser);
   if (googleUser == null) return null;
 
-  final googleAuth = await googleUser.authentication;
+  // final googleAuth = await googleUser.authentication;
 
-  final Response response;
+  /* final Response response;
   try {
     response = await http.get(
         Uri.http('192.168.88.87:4000', '/api/getInfoSession'),
@@ -125,7 +129,7 @@ Future googleLoginAndRegister() async {
   } catch (e) {
     print(">>>>>>>>>>>>Request error");
     print(e);
-  }
+  } */
   print("googleUser>>>>>>>>>>>>>>>>>>>>>>>$googleUser");
 
 

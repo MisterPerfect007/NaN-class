@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
           BlocProvider<HomeBloc>(create: (context) => HomeBloc()),
           BlocProvider<CoursesBloc>(create: (context) => CoursesBloc()),
         ], 
-        child: const Root(),)
+        child: const Login(),)
       
     );
   }
