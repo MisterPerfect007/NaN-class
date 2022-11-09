@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nan_class/features/Quizs/presenter/pages/quizs_list_page.dart';
 import 'package:nan_class/features/home/presenter/bloc/home_bloc.dart';
 import 'package:nan_class/features/home/presenter/pages/home.dart';
 import 'package:nan_class/ui/colors/app_colors.dart';
 
-import 'features/courses/presenter/pages/bloc/courses_bloc.dart';
+import 'features/courses/presenter/bloc/courses_bloc.dart';
 import 'features/courses/presenter/pages/courses_page.dart';
 import 'features/home/presenter/widgets/bottomNavigationBar/custtom_navigation_bar.dart';
 import 'features/loginAndRegister/presenter/pages/login.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
           BlocProvider<HomeBloc>(create: (context) => HomeBloc()),
           BlocProvider<CoursesBloc>(create: (context) => CoursesBloc()),
         ], 
-        child: const Login(),)
+        child: const Root(),)
       
     );
   }
@@ -66,23 +67,22 @@ class _RootState extends State<Root> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     pageController.dispose();
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.darkBg,
       body: PageView(
         controller: pageController,
         onPageChanged: changeIndex,
         padEnds: false,
         physics: const BouncingScrollPhysics(),
-        children: const [
-          Home(),
-          CoursesPage()
-        ],
+        children: const [Home(), CoursesPage(), QuizsListPage()],
       ),
       bottomNavigationBar: CustomNavigationBar(
         changeIndex: changeIndex,
