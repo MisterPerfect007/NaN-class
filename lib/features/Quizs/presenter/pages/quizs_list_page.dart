@@ -24,7 +24,7 @@ class QuizsListPage extends StatelessWidget {
                 color: AppColors.mainViolet,
                 child: ExpansionTile(
                   title: const Text(
-                    'Data',
+                    'Course : 1-bien-utiliser-votre-mac 1-bien-utiliser-votre-mac',
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(color: Colors.white),
                   ),
@@ -43,20 +43,22 @@ class QuizsListPage extends StatelessWidget {
                           color: Colors.white.withOpacity(0.1),
                           child: Row(
                             children: const [
+                              SvgIcon(
+                                icon: SvgIcons.rankingStar,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 10),
                               Expanded(
                                   child: Text(
                                 "1. Bien utiliser son mac utiliser son mac utiliser son mac",
                                 maxLines: 1,
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 16,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w500),
                                 overflow: TextOverflow.ellipsis,
                               )),
-                              SvgIcon(
-                                icon: SvgIcons.chevronRight,
-                                color: Colors.white,
-                              ),
+                              
                             ],
                           ),
                         ),

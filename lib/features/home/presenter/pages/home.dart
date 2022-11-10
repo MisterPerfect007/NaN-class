@@ -21,20 +21,23 @@ class Home extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color.fromRGBO(39, 41, 53, 1),
-      appBar: buildAppBar(),
+      appBar: buildAppBar(context),
       body: HomeBody(size: size),
     );
   }
 
-  AppBar buildAppBar() {
+  AppBar buildAppBar(context) {
     return AppBar(
         elevation: 0,
         backgroundColor: const Color.fromRGBO(26, 28, 52, 1),
-        leading: const Padding(
-          padding: EdgeInsets.all(10),
-          child: SvgIcon(
-            icon: SvgIcons.menuAltLeft,
-            color: Colors.white,
+        leading: InkWell(
+          onTap: () => Scaffold.of(context).openDrawer(),
+          child: const Padding(
+            padding: EdgeInsets.all(10),
+            child: SvgIcon(
+              icon: SvgIcons.menuAltLeft,
+              color: Colors.white,
+            ),
           ),
         ),
         actions: [

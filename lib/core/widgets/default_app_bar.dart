@@ -4,6 +4,7 @@ import '../../ui/colors/app_colors.dart';
 
 AppBar defautAppBar(String title) {
   return AppBar(
+    automaticallyImplyLeading: false,
     backgroundColor: AppColors.mainViolet,
     elevation: 0,
     centerTitle: true,

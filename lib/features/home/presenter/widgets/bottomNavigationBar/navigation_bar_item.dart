@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../../../../../ui/svg_icons/svg_icons.dart';
@@ -8,7 +7,7 @@ class NavigationBarItem extends StatelessWidget {
   final SvgIcons icon;
   final int currentIndex;
   final int index;
-  final Function(int) changeIndex;
+  final void Function(int) changeIndex;
   // final int index;
   // final int selectedIndex;
 
@@ -29,7 +28,9 @@ class NavigationBarItem extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           splashColor: Colors.white.withOpacity(0.2),
-          onTap: () => changeIndex(index),
+          onTap: () {
+            changeIndex(index);
+          },
           child: Padding(
             padding: const EdgeInsets.only(left: 5, right: 5),
             child: Column(

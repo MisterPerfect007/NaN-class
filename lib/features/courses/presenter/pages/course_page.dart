@@ -22,7 +22,8 @@ class CoursePage extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: const [
-                CourseCard()
+                CourseCard(),
+                CourseCard(),
               ],
             ),
           ),
@@ -39,64 +40,116 @@ class CourseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-          color: AppColors.mainViolet,
-          borderRadius: BorderRadius.all(Radius.circular(5)),),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {},
-          splashColor: Colors.white.withOpacity(0.2),
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "1 - Tilte ksbdfkjb bflljfqkjsjqjbjqsfk Tilte ksbdfkjb bflljfqkjsjqjbjqsfk",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500
-                        ),
-                      ),
-                      const SizedBox(height: 10,),
-                      Row(
+    return Column(
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            color: AppColors.mainViolet,
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {},
+              // radius: 5,
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              splashColor: Colors.white.withOpacity(0.2),
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              const SizedBox(width: 20,),
-                              SvgPicture.asset("assets/svg/video-file.svg", width: 15,),
-                              const Text("1", style: TextStyle(fontSize: 12, color: Colors.white),),
-                            ],
+                          const Text(
+                            "1 - Tilte ksbdfkjb bflljfqkjsjqjbjqsfk Tilte ksbdfkjb bflljfqkjsjqjbjqsfk",
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          const SizedBox(
+                            height: 10,
                           ),
                           Row(
                             children: [
-                              const SizedBox(width: 10,),
-                              SvgPicture.asset("assets/svg/document.svg", width: 15,),
-                              const Text("0", style: TextStyle(fontSize: 12, color: Colors.white),),
+                              Row(
+                                children: [
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  SvgPicture.asset(
+                                    "assets/svg/video-file.svg",
+                                    width: 15,
+                                  ),
+                                  const Text(
+                                    "1",
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  SvgPicture.asset(
+                                    "assets/svg/document.svg",
+                                    width: 15,
+                                  ),
+                                  const Text(
+                                    "0",
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.white),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                    const SvgIcon(
+                      icon: SvgIcons.circleChevronRight,
+                      color: Colors.white,
+                    )
+                  ],
                 ),
-                const SvgIcon(
-                  icon: SvgIcons.circleChevronRight,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 5),
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {},
+            // splashColor: Colors.red,
+            child: Row(
+              //  mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                SizedBox(width: 15),
+                SvgIcon(
+                  icon: SvgIcons.roundSubdirectoryArrowRight,
+                  size: 25,
                   color: Colors.white,
+                ),
+                Text(
+                  "Take Quiz",
+                  style: TextStyle(
+                    color: AppColors.mainGreen,
+                  ),
                 )
               ],
             ),
           ),
         ),
-      ),
+        const SizedBox(height: 10),
+      ],
     );
   }
 }
