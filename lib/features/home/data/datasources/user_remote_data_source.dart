@@ -9,16 +9,15 @@ import '../../../../core/failure/failures.dart';
 
 ///Get user data
 ///
-///return a [UserModel] when a user is found 
+///return a [UserModel] when a user is found
 ///or [UserFailure] when somthing went wrong
 Future<Either<UserFailure, UserModel>> getUserRemoteDataSource(
     String googleUserId) async {
   final Response response;
   try {
-    response = await http
-        .get(Uri.http('192.168.88.87:4000', '/api/mobile/getUser'), headers: {
-      'auth': googleUserId
-    }).timeout(const Duration(seconds: 60));
+    response = await http.get(
+        Uri.http('192.168.88.53:4000', '/api/mobile/getUser'),
+        headers: {'auth': googleUserId}).timeout(const Duration(seconds: 60));
 
     if (response.statusCode == 200) {
       //Response is ok
@@ -28,7 +27,11 @@ Future<Either<UserFailure, UserModel>> getUserRemoteDataSource(
         //if status is false, it means there is not such user is db
         return const Left(UserFailure(UserErrorType.noUserFound));
       } else {
-        return Right(UserModel.fromJson(jsonBody['data']));
+        try {
+          return Right(UserModel.fromJson(jsonBody['data']));
+        } catch (e) {
+          return const Left(UserFailure(UserErrorType.unexpectedError));
+        }
       }
     } else {
       return const Left(UserFailure(UserErrorType.failedRequest));

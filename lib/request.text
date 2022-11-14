@@ -1,7 +1,19 @@
-GET http://192.168.88.87:4000/api/mobile/getCourses
+GET http://192.168.88.53:4000/api/mobile/getCourses
+auth: 116420318969971436809
+
+
+GET http://192.168.88.53:4000/api/mobile/getCourseSections/FLUTTER/FR->matrisier_flutter
+auth: 116420318969971436809
+
+GET http://192.168.88.53:4000/api/mobile/getUser
 auth: 116420318969971436809
 
 
 
-GET http://192.168.88.87:4000/api/mobile/getUser
-auth: 116420318969971436809
+
+{
+    'speciality': INTRO || FLUTTER,
+    'name': nom_du_cours,
+    'month': month || null,
+    'langage': langage || null
+}

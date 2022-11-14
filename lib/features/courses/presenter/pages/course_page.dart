@@ -4,15 +4,18 @@ import 'package:nan_class/core/widgets/default_app_bar.dart';
 import 'package:nan_class/ui/colors/app_colors.dart';
 import 'package:nan_class/ui/svg_icons/svg_icons.dart';
 
+import '../../data/models/courses_model.dart';
+
 class CoursePage extends StatelessWidget {
-  const CoursePage({super.key});
+  final MonthCourse monthCourse;
+  const CoursePage({super.key, required this.monthCourse});
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: defautAppBar(
-          "1. Bien utiliser son Mac avec Mr ramjzljle ekekrkez [EN]"),
+          monthCourse.name ?? ""),
       body: Container(
         width: double.infinity,
         height: size.height,

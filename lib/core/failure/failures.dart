@@ -12,5 +12,6 @@ class UserFailure extends Equatable{
 enum UserErrorType{
   failedRequest,
   noUserFound,
-  networkError
+  networkError,
+  unexpectedError
 }

@@ -64,9 +64,9 @@ class UserModel extends User {
         matricule: json["matricule"],
         googleId: json["googleId"],
         accounting: AccountingModel.fromJson(json["accounting"]),
-        ratingsPoints: json["ratings_points"].toDouble(),
-        coursesPoints: json["courses_points"].toDouble(),
-        projectsPoints: json["projects_points"].toDouble(),
+        ratingsPoints: json["ratings_points"]?.toDouble(),
+        coursesPoints: json["courses_points"]?.toDouble(),
+        projectsPoints: json["projects_points"]?.toDouble(),
       );
 
   Map<String, dynamic> toJson() => {

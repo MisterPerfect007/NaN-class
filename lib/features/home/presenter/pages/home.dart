@@ -1,17 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:nan_class/features/home/data/datasources/user_remote_data_source.dart';
 import 'package:nan_class/ui/colors/app_colors.dart';
 
 import '../../../../ui/svg_icons/svg_icons.dart';
-import '../../../courses/data/datasources/courses_remote_data_source.dart';
 import '../../../loginAndRegister/domain/entity.dart';
-import '../../../loginAndRegister/utils/google_auth.dart';
 import '../bloc/home_bloc.dart';
-import '../widgets/bottomNavigationBar/custtom_navigation_bar.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -41,10 +36,26 @@ class Home extends StatelessWidget {
           ),
         ),
         actions: [
-          SvgPicture.asset(
-            "assets/svg/bad-o.svg",
-            color: Colors.white,
-          )
+          BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+            if (state is HomeLoaded) {
+              return Padding(
+                padding: const EdgeInsets.all(5),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: CachedNetworkImage(
+                    imageUrl:
+                        state.user.avatar ?? "",
+                    placeholder: (context, url) =>
+                        const Center(child: CircularProgressIndicator()),
+                    // errorWidget: (context, url, error) => ,
+                    fadeOutDuration: const Duration(milliseconds: 300),
+                    fadeInDuration: const Duration(milliseconds: 300),
+                  ),
+                ),
+              );
+            }
+            return Container();
+          }),
         ]);
   }
 }
@@ -61,7 +72,8 @@ class HomeBody extends StatefulWidget {
   State<HomeBody> createState() => _HomeBodyState();
 }
 
-class _HomeBodyState extends State<HomeBody> with AutomaticKeepAliveClientMixin<HomeBody> {
+class _HomeBodyState extends State<HomeBody>
+    with AutomaticKeepAliveClientMixin<HomeBody> {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -69,20 +81,24 @@ class _HomeBodyState extends State<HomeBody> with AutomaticKeepAliveClientMixin<
     return SizedBox(
       height: widget.size.height,
       width: double.infinity,
-      // padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 50),
-      child:BlocBuilder<HomeBloc, HomeState>(
-          builder: (context, state) {
-            if (state is HomeLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }else if (state is HomeLoaded){
-              return LoadedWidget(user: state.user,);
-            }else if (state is HomeFailure){
-              return Center(child: Text("${state.errorType}"),);
-            }else{
-              return const Text("Unexpected result");
-            }
-          },
-        ),
+      child: BlocBuilder<HomeBloc, HomeState>(
+        builder: (context, state) {
+          // print(state);
+          if (state is HomeLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is HomeLoaded) {
+            return LoadedWidget(
+              user: state.user,
+            );
+          } else if (state is HomeFailure) {
+            return Center(
+              child: Text("${state.errorType}"),
+            );
+          } else {
+            return const Text("Unexpected result");
+          }
+        },
+      ),
     );
   }
 
@@ -93,7 +109,8 @@ class _HomeBodyState extends State<HomeBody> with AutomaticKeepAliveClientMixin<
 class LoadedWidget extends StatelessWidget {
   final User user;
   const LoadedWidget({
-    Key? key, required this.user,
+    Key? key,
+    required this.user,
   }) : super(key: key);
 
   @override
@@ -107,19 +124,10 @@ class LoadedWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                GestureDetector(
-                  onTap: ()async {
-                    final courses = await getCourcesRemoteDataSource("116420318969971436809");
-                    courses.fold(
-                      (l) => print(l), 
-                      (r) => print("${r.first.month} = ${r.first.courses.first.toJson()}"), 
-                      );
-                  },
-                  child: Text(
-                    "Hello, ",
-                    style: TextStyle(
-                        fontSize: 18, color: Colors.white.withOpacity(0.6)),
-                  ),
+                Text(
+                  "Hello, ",
+                  style: TextStyle(
+                      fontSize: 18, color: Colors.white.withOpacity(0.6)),
                 ),
                 Text(
                   user.login ?? '',
@@ -146,10 +154,23 @@ class LoadedWidget extends StatelessWidget {
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,
               children: [
-                PointCard(name: 'Courses points', points: user.coursesPoints ?? 0,),
-                PointCard(name: 'Projecst points', points: user.projectsPoints ?? 0,),
-                PointCard(name: 'Rating points', points: user.ratingsPoints ?? 0,),
-                PointCard(name: 'Total points', points: computeTotalPoints(), color: AppColors.mainGreen,),
+                PointCard(
+                  name: 'Courses points',
+                  points: user.coursesPoints ?? 0,
+                ),
+                PointCard(
+                  name: 'Projecst points',
+                  points: user.projectsPoints ?? 0,
+                ),
+                PointCard(
+                  name: 'Rating points',
+                  points: user.ratingsPoints ?? 0,
+                ),
+                PointCard(
+                  name: 'Total points',
+                  points: computeTotalPoints(),
+                  color: AppColors.mainGreen,
+                ),
               ],
             )
           ],
@@ -157,10 +178,13 @@ class LoadedWidget extends StatelessWidget {
       ),
     );
   }
+
   ///add [user.coursesPoints] + [user.projectsPoints] + [user.ratingsPoints]
   ///
-  double computeTotalPoints(){
-    return (user.coursesPoints ?? 0) + (user.projectsPoints ?? 0) + (user.ratingsPoints ?? 0);
+  double computeTotalPoints() {
+    return (user.coursesPoints ?? 0) +
+        (user.projectsPoints ?? 0) +
+        (user.ratingsPoints ?? 0);
   }
 }
 
@@ -168,9 +192,12 @@ class PointCard extends StatelessWidget {
   final String name;
   final double points;
   final Color? color;
-  const PointCard({
-    Key? key, required this.name, required this.points, this.color = Colors.white
-  }) : super(key: key);
+  const PointCard(
+      {Key? key,
+      required this.name,
+      required this.points,
+      this.color = Colors.white})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +218,9 @@ class PointCard extends StatelessWidget {
           Text(
             '$points',
             style: TextStyle(
-                fontSize: 60, color: color ?? Colors.white, fontWeight: FontWeight.w800),
+                fontSize: 60,
+                color: color ?? Colors.white,
+                fontWeight: FontWeight.w800),
           ),
           Container()
         ],

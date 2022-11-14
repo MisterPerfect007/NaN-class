@@ -13,8 +13,10 @@ class VideoPlayerPage extends StatefulWidget {
 }
 
 class _VideoPlayerPageState extends State<VideoPlayerPage> {
-  bool isPlayerCommandsShowed = false;
-  bool isVideoPlaying = true;
+  bool isPlayerCommandsShowed = true;
+  bool isVideoPlaying = false;
+  //The video current time to show
+  String videoPlayingTime = "";
   late VideoPlayerController _controller;
 
   @override
@@ -26,17 +28,17 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       // 'https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4',
       // closedCaptionFile: _loadCaptions(),
       videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-    )..play();
+    );
 
-    /* _controller.addListener(() {
+    _controller.addListener(() {
+      // print(_controller.value.duration.inSeconds);
       setState(() {
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        //Update the video current time
+        videoPlayingTime = videoTime(_controller.value.position.inSeconds);
       });
-    }); */
-    // _controller.setLooping(true);
+    });
+    
     _controller.initialize();
-
-    showPlayerCommands();
   }
 
   void showPlayerCommands() {
@@ -44,13 +46,13 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       setState(() {
         isPlayerCommandsShowed = true;
       });
-
-      Timer(const Duration(seconds: 5), () {
-        setState(() {
-          isPlayerCommandsShowed = false;
-        });
-      });
     }
+
+    Timer(const Duration(seconds: 5), () {
+      setState(() {
+        isPlayerCommandsShowed = false;
+      });
+    });
   }
 
   void pauseOrResume() {
@@ -58,12 +60,14 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       _controller.pause();
       setState(() {
         isVideoPlaying = false;
+        isPlayerCommandsShowed = true;
       });
     } else {
       _controller.play();
       setState(() {
         isVideoPlaying = true;
       });
+      showPlayerCommands();
     }
   }
 
@@ -86,7 +90,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                 if (isPlayerCommandsShowed) {
                   pauseOrResume();
                 }
-                showPlayerCommands();
+                else {
+                  setState(() {
+                    isPlayerCommandsShowed = true;
+                  });
+                }
               },
               child: SafeArea(
                 child: Stack(
@@ -111,12 +119,27 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                           Container(
                               margin:
                                   const EdgeInsets.only(left: 10, right: 10),
-                              child: VideoProgressIndicator(
-                                _controller,
-                                allowScrubbing: true,
-                                colors: const VideoProgressColors(
-                                    playedColor: AppColors.mainViolet),
-                              )),
+                              child: Row(
+                                  // mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    VideoTimeWidget(
+                                        videoPlayingTime: videoPlayingTime),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      child: VideoProgressIndicator(
+                                        _controller,
+                                        allowScrubbing: true,
+                                        padding: const EdgeInsets.all(0),
+                                        colors: const VideoProgressColors(
+                                            playedColor: AppColors.mainViolet),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    VideoTimeWidget(
+                                        videoPlayingTime: videoTime(_controller
+                                            .value.duration.inSeconds)),
+                                  ])),
                           Padding(
                             padding: const EdgeInsets.only(
                                 left: 10, right: 10, top: 5, bottom: 5),
@@ -145,33 +168,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                                 Material(
                                   color: Colors.transparent,
                                   child: InkWell(
-                                    onTap: () async {
-                                      // ;
-                                      // print(MediaQuery.of(context).orientation);
-                                      MediaQuery.of(context).orientation ==
-                                              Orientation.portrait
-                                          ? {
-                                              await SystemChrome
-                                                  .setEnabledSystemUIMode(
-                                                      SystemUiMode.manual,
-                                                      overlays: []),
-                                              await SystemChrome
-                                                  .setPreferredOrientations([
-                                                DeviceOrientation.landscapeLeft,
-                                                DeviceOrientation
-                                                    .landscapeRight,
-                                              ])
-                                            }
-                                          : {
-                                              await SystemChrome
-                                                  .setEnabledSystemUIMode(
-                                                      SystemUiMode.edgeToEdge),
-                                              await SystemChrome
-                                                  .setPreferredOrientations([
-                                                DeviceOrientation.portraitUp,
-                                              ])
-                                            };
-                                    },
+                                    onTap: setLandscapeOrPortrait,
                                     child: const Icon(
                                       Icons.fullscreen,
                                       color: Colors.white,
@@ -194,4 +191,61 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           )
         : Container();
   }
+
+  void setLandscapeOrPortrait() async {
+    MediaQuery.of(context).orientation == Orientation.portrait
+        ? {
+            await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                overlays: []),
+            await SystemChrome.setPreferredOrientations([
+              DeviceOrientation.landscapeLeft,
+              DeviceOrientation.landscapeRight,
+            ])
+          }
+        : {
+            await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge),
+            await SystemChrome.setPreferredOrientations([
+              DeviceOrientation.portraitUp,
+            ])
+          };
+  }
+}
+
+class VideoTimeWidget extends StatelessWidget {
+  const VideoTimeWidget({
+    Key? key,
+    required this.videoPlayingTime,
+  }) : super(key: key);
+
+  final String videoPlayingTime;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+        color: Colors.transparent,
+        child: Text(
+          videoPlayingTime,
+          style: const TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+              shadows: [
+                Shadow(
+                  color: Colors.black,
+                  blurRadius: 15,
+                )
+              ]),
+        ));
+  }
+}
+
+///Takes time in second and return a custom formated string to be display
+///
+///videoTime(69) will return "01:09"
+String videoTime(int time) {
+  int min = ((time >= 60) ? time / ~60 : 0).toInt();
+  int seconds = time % 60;
+  String secondsString = seconds <= 9 ? "0$seconds" : "$seconds";
+  String minString = min <= 9 ? "0$min" : "$min";
+  return "$minString : $secondsString";
 }
