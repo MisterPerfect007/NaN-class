@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nan_class/features/Quizs/presenter/pages/quiz_passing.dart';
 import 'package:nan_class/features/Quizs/presenter/pages/quizs_list_page.dart';
 import 'package:nan_class/features/home/presenter/bloc/home_bloc.dart';
 import 'package:nan_class/features/home/presenter/pages/home.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
             BlocProvider<HomeBloc>(create: (context) => HomeBloc()),
             BlocProvider<CoursesBloc>(create: (context) => CoursesBloc()),
           ],
-          child: const VideoPlayerPage(),
+          child: const QuizPassing(),
         ));
   }
 }
