@@ -7,7 +7,7 @@ import 'package:nan_class/ui/colors/app_colors.dart';
 import 'package:nan_class/ui/svg_icons/svg_icons.dart';
 
 import '../../../../core/widgets/default_app_bar.dart';
-import '../bloc/courses_bloc.dart';
+import '../bloc/courses/courses_bloc.dart';
 import 'course_page.dart';
 
 class CoursesPage extends StatefulWidget {

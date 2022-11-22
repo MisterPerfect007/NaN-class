@@ -1,9 +1,26 @@
-GET http://192.168.88.53:4000/api/mobile/getCourses
+POST http://192.168.88.31:4000/api/mobile/getCourseSections/
+auth: 116420318969971436809
+content-type: application/json
+
+{
+    "speciality": "FLUTTER",
+    "courseName": "matrisier_flutter",
+    "months": [
+        "October",
+        "November"
+      ],
+    "langage": "FR"
+}
+
+
+GET http://192.168.88.31:4000/api/mobile/getCourses
 auth: 116420318969971436809
 
 
-GET http://192.168.88.53:4000/api/mobile/getCourseSections/FLUTTER/FR->matrisier_flutter
-auth: 116420318969971436809
+
+
+
+
 
 GET http://192.168.88.53:4000/api/mobile/getUser
 auth: 116420318969971436809
@@ -13,7 +30,7 @@ auth: 116420318969971436809
 
 {
     'speciality': INTRO || FLUTTER,
-    'name': nom_du_cours,
-    'month': month || null,
+    'courseName': nom_du_cours,
+    'months': ["oct", "nov"] || null,
     'langage': langage || null
 }

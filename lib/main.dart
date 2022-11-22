@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nan_class/features/Quizs/presenter/pages/quiz_passing.dart';
 import 'package:nan_class/features/home/presenter/bloc/home_bloc.dart';
 
 import 'appRoot/root.dart';
-import 'features/courses/presenter/bloc/courses_bloc.dart';
+import 'features/courses/presenter/bloc/courses/courses_bloc.dart';
 
 void main() {
   runApp(const MyApp());

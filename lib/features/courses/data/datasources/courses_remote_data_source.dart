@@ -17,7 +17,7 @@ Future<Either<CourseFailure, List<CoursesModel>>> getCourcesRemoteDataSource(
   final Response response;
   try {
     response = await http.get(
-        Uri.http('192.168.88.53:4000', '/api/mobile/getCourses'),
+        Uri.http('192.168.88.31:4000', '/api/mobile/getCourses'),
         headers: {'auth': googleUserId}).timeout(const Duration(seconds: 60));
 
     if (response.statusCode == 200) {

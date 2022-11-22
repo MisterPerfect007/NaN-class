@@ -14,8 +14,7 @@ class CoursePage extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: defautAppBar(
-          monthCourse.name ?? ""),
+      appBar: defautAppBar(monthCourse.name ?? ""),
       body: Container(
         width: double.infinity,
         height: size.height,
@@ -46,11 +45,96 @@ class CourseCard extends StatelessWidget {
     return Column(
       children: [
         Container(
-          decoration: const BoxDecoration(
-            color: AppColors.mainViolet,
-            borderRadius: BorderRadius.all(Radius.circular(5)),
+            decoration: const BoxDecoration(
+              color: AppColors.mainViolet,
+            ),
+            child: ExpansionTile(
+              collapsedIconColor: AppColors.mainWhite,
+              title: const Text(
+                "Section title Section title Section title Section title Section title",
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Colors.white),
+              ),
+              children: [
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {},
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      color: AppColors.mainWhite.withOpacity(0.3),
+                      width: double.infinity,
+                      // height: 30,
+                      child: Row(
+                        children: [
+                          SvgIcon(
+                              icon: SvgIcons.baselineVideoFile,
+                              color: Colors.red.shade300),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const SvgIcon(
+                            icon: SvgIcons.filePresent,
+                            color: Colors.blue,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: Text(
+                              "File name File name File name File name File name File name vFile name",
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: AppColors.mainWhite.withOpacity(0.7)),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const SvgIcon(
+                              icon: SvgIcons.chevronRight,
+                              color: AppColors.mainWhite),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            )),
+        const SizedBox(height: 5),
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {},
+            // splashColor: Colors.red,
+            child: Row(
+              //  mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                SizedBox(width: 15),
+                SvgIcon(
+                  icon: SvgIcons.roundSubdirectoryArrowRight,
+                  size: 25,
+                  color: Colors.white,
+                ),
+                Text(
+                  "Take Quiz",
+                  style: TextStyle(
+                    color: AppColors.mainGreen,
+                  ),
+                )
+              ],
+            ),
           ),
-          child: Material(
+        ),
+        const SizedBox(height: 10),
+      ],
+    );
+  }
+}
+
+
+/* 
+Material(
             color: Colors.transparent,
             child: InkWell(
               onTap: () {},
@@ -125,34 +209,4 @@ class CourseCard extends StatelessWidget {
               ),
             ),
           ),
-        ),
-        const SizedBox(height: 5),
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () {},
-            // splashColor: Colors.red,
-            child: Row(
-              //  mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                SizedBox(width: 15),
-                SvgIcon(
-                  icon: SvgIcons.roundSubdirectoryArrowRight,
-                  size: 25,
-                  color: Colors.white,
-                ),
-                Text(
-                  "Take Quiz",
-                  style: TextStyle(
-                    color: AppColors.mainGreen,
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-      ],
-    );
-  }
-}
+ */
