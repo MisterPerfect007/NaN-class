@@ -11,7 +11,21 @@ class CourseInitial extends CourseState {}
 
 class CourseLoading extends CourseState {}
 
-class CourseLoaded extends CourseState {}
+class CourseLoaded extends CourseState {
+  final CourseSectionModel courseSections;
 
-class CourseFailed extends CourseState {}
+  const CourseLoaded(this.courseSections);
+
+  @override
+  List<Object> get props => [courseSections];
+}
+
+class CourseFailed extends CourseState {
+  final SectionFailure failure;
+
+  const CourseFailed(this.failure);
+
+  @override
+  List<Object> get props => [failure];
+}
 

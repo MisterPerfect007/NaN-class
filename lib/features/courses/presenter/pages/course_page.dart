@@ -13,6 +13,7 @@ class CoursePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: defautAppBar(monthCourse.name ?? ""),
       body: Container(

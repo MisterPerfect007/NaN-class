@@ -4,13 +4,13 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:nan_class/features/loginAndRegister/data/models/user_model.dart';
+
 
 import '../models/courses_model.dart';
 
-///Get user data
+///Get courses data
 ///
-///return a [UserModel] when a user is found
+///return a list of [CoursesModel] when everything went good
 ///or [CourseFailure] when somthing went wrong
 Future<Either<CourseFailure, List<CoursesModel>>> getCourcesRemoteDataSource(
     String googleUserId) async {
