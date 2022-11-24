@@ -9,8 +9,25 @@ part 'course_state.dart';
 
 class CourseBloc extends Bloc<CourseEvent, CourseState> {
   CourseBloc() : super(CourseInitial()) {
-    on<CourseEvent>((event, emit) {
-      // TODO: implement event handler
+    on<CourseEvent>((event, emit) async {
+      
+      if (event is GetCourseSections) {
+
+        emit(CourseLoading());
+
+        final resultOrFailure = await getSectionsRemoteDataSource(
+          googleUserId: event.googleUserId,
+          speciality: event.speciality,
+          courseName: event.courseName,
+          months: event.months,
+          language: event.language,
+        );
+
+        resultOrFailure.fold(
+          (failure) => emit(CourseFailed(failure)),
+          (courseSections) => emit(CourseLoaded(courseSections)),
+        );
+      }
     });
   }
 }

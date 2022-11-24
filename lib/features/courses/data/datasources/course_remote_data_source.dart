@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
+import 'package:nan_class/core/constants/constants.dart';
 
 import '../models/course_section_model.dart';
 
@@ -11,16 +12,16 @@ import '../models/course_section_model.dart';
 ///
 ///return a [CourseSectionModel] when everything went fine
 ///or [SectionFailure] when somthing went wrong
-Future<Either<SectionFailure, CourseSectionModel>>
-    getSectionsRemoteDataSource({
-      String? speciality,
-      required String courseName,
-      List<String>? months,
-      String? language,
-    }) async {
+Future<Either<SectionFailure, CourseSectionModel>> getSectionsRemoteDataSource({
+  required String googleUserId,
+  String? speciality,
+  required String courseName,
+  List<String>? months,
+  String? language,
+}) async {
 
-  final Map<String, dynamic> requestBody = {
-    "speciality": speciality?? "INTRO",
+  final requestBody = {
+    "speciality": speciality ?? "INTRO",
     "courseName": courseName,
     "months": months,
     "language": language
@@ -30,16 +31,21 @@ Future<Either<SectionFailure, CourseSectionModel>>
 
   try {
     response = await http
-        .post(
-          Uri.http('192.168.88.31:4000', '/api/mobile/getCourses'),
-          body: requestBody,
-        )
+        .post(Uri.https(apiBaseUrl, '/api/mobile/getCourseSections'),
+            headers: {
+              'auth': googleUserId,
+              'Content-type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: jsonEncode(requestBody),
+            encoding: Encoding.getByName("utf-8"))
         .timeout(const Duration(seconds: 60));
 
     if (response.statusCode == 200) {
       //Response is ok
       final body = response.body;
       // final body = bodyString;
+      
       final Map<String, dynamic> jsonBody =
           Map<String, dynamic>.from(jsonDecode(body));
 
@@ -74,67 +80,3 @@ enum SectionErrorType {
   networkError,
   unexpectedError
 }
-
-String bodyString = '''{
-    "status": true,
-    "data": {
-      "1-section one": {
-        "data": [
-          {
-            "name": "video.mp4",
-            "ext": ".mp4",
-            "link": "FLUTTER/FR->matrisier_flutter_Oct_Nov/1-section_+one/video.mp4",
-            "subtitles": [],
-            "size": 0
-          }
-        ],
-        "withoutQuiz": false,
-        "active": true,
-        "pass": false,
-        "quiz": {
-          "attempts": 2,
-          "deductionPoints": 0,
-          "seconds": 0,
-          "endTime": 334567,
-          "points": 3,
-          "pass": false,
-          "responses": {
-            "C quoi Flutter": "Framework",
-            "architecture en flutter": [
-              "mvn",
-              "mvc"
-            ]
-          }
-        }
-      },
-      "2-section-two": {
-        "data": [
-          {
-            "name": "video2.mp4",
-            "ext": ".mp4",
-            "link": "FLUTTER/FR->matrisier_flutter_Oct_Nov/2-section-two/video2.mp4",
-            "subtitles": [],
-            "size": 0
-          }
-        ],
-        "withoutQuiz": false,
-        "active": false,
-        "pass": false,
-        "quiz": {
-          "attempts": 2,
-          "deductionPoints": 0,
-          "seconds": 0,
-          "endTime": 334567,
-          "points": 3,
-          "pass": false,
-          "responses": {
-            "C quoi Flutter": "Framework",
-            "architecture en flutter": [
-              "mvn",
-              "mvc"
-            ]
-          }
-        }
-      }
-    }
-  }''';

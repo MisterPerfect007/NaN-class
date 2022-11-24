@@ -15,7 +15,7 @@ class CoursesModel extends Courses {
 
 class MonthCourse {
   final String? id;
-  final String? name;
+  final String name;
   final String? language;
   final String? forr;
   final int? sections;
@@ -23,7 +23,7 @@ class MonthCourse {
 
   MonthCourse({
     this.id,
-    this.name,
+    required this.name,
     this.sections,
     this.forr,
     this.language,

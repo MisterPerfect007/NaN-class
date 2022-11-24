@@ -18,11 +18,11 @@ class _QuizPassingState extends State<QuizPassing> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            QuestionAndAnswers(),
+            QuestionMultipleAnswers(),
             const SizedBox(height: 20),
-            QuestionAndAnswers(),
+            QuestionMultipleAnswers(),
             const SizedBox(height: 20),
-            QuestionAndAnswers(),
+            QuestionMultipleAnswers(),
           ],
         ),
       ),
@@ -30,19 +30,38 @@ class _QuizPassingState extends State<QuizPassing> {
   }
 }
 
-class QuestionAndAnswers extends StatelessWidget {
-  const QuestionAndAnswers({
+class QuestionMultipleAnswers extends StatefulWidget {
+  const QuestionMultipleAnswers({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<QuestionMultipleAnswers> createState() =>
+      _QuestionMultipleAnswersState();
+}
+
+class _QuestionMultipleAnswersState extends State<QuestionMultipleAnswers> {
+  List<String> answers = [];
+
+  void setAnswer(String answer) {
+    if (answers.contains(answer)) {
+      setState(() {
+        answers.remove(answer);
+      });
+    } else {
+      setState(() {
+        answers.add(answer);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
-      color: AppColors.mainViolet,
-        borderRadius: BorderRadius.all(Radius.circular(10))
-      ),
+          color: AppColors.mainViolet,
+          borderRadius: BorderRadius.all(Radius.circular(10))),
       padding: const EdgeInsets.all(10),
       child: Column(
         children: [
@@ -58,60 +77,103 @@ class QuestionAndAnswers extends StatelessWidget {
           Column(
             children: [
               //answer
-              Container(
-                padding: const EdgeInsets.all(10),
-                width: double.infinity,
-                color: AppColors.mainWhite.withOpacity(0.2),
-                child: Row(
-                  children: [
-                    // const SizedBox(width: 20),
-                    Container(
-                      height: 20,
-                      width: 20,
-                      decoration: BoxDecoration(
-                          color: AppColors.mainWhite.withOpacity(0.5),
-                          borderRadius: const BorderRadius.all(
-                              Radius.circular(20))),
-                    ),
-                    const SizedBox(width: 20),
-                    const Text(
-                      "Answer 1",
-                      style: TextStyle(
-                        color: AppColors.mainWhite,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              MultiAnswer(setAnswer: setAnswer, answerText: 'Answer 1', answers: answers,),
               const SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.all(10),
-                width: double.infinity,
-                color: AppColors.mainWhite.withOpacity(0.2),
-                child: Row(
-                  children: [
-                    // const SizedBox(width: 20),
-                    Container(
-                      height: 20,
-                      width: 20,
-                      decoration: BoxDecoration(
-                          color: AppColors.mainWhite.withOpacity(0.5),
-                          borderRadius: const BorderRadius.all(
-                              Radius.circular(20))),
-                    ),
-                    const SizedBox(width: 20),
-                    const Text(
-                      "Answer 1",
-                      style: TextStyle(
-                        color: AppColors.mainWhite,
-                      ),
-                    ),
-                  ],
-                ),
-              )
+              MultiAnswer(setAnswer: setAnswer, answerText: 'Answer 2', answers: answers,)
             ],
           )
         ],
+      ),
+    );
+  }
+}
+
+class MultiAnswer extends StatelessWidget {
+  final void Function(String) setAnswer;
+  final String answerText;
+  final List<String> answers;
+  const MultiAnswer({
+    Key? key, required this.setAnswer, required this.answerText, required this.answers,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          setAnswer(answerText);
+        },
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          width: double.infinity,
+          color: AppColors.mainWhite.withOpacity(0.2),
+          child: Row(
+            children: [
+              // const SizedBox(width: 20),
+              Container(
+                height: 20,
+                width: 20,
+                decoration: BoxDecoration(
+                    color: AppColors.mainWhite.withOpacity(0.5),
+                    borderRadius: const BorderRadius.all(Radius.circular(20))),
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: Text(
+                  "$answers",
+                  // overflow: TextOverflow.clip,
+                  style: TextStyle(
+                    color: AppColors.mainWhite,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SingleAnswer extends StatelessWidget {
+  const SingleAnswer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {},
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          width: double.infinity,
+          color: AppColors.mainWhite.withOpacity(0.2),
+          child: Row(
+            children: [
+              // const SizedBox(width: 20),
+              Container(
+                height: 20,
+                width: 20,
+                decoration: BoxDecoration(
+                    color: AppColors.mainWhite.withOpacity(0.5),
+                    borderRadius: const BorderRadius.all(Radius.circular(20))),
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: Text(
+                  "This is a very very long long long answer wdhghjs db fubsdkjf dsfuhgs sdhsd sdfhdjflf",
+                  // overflow: TextOverflow.clip,
+                  style: TextStyle(
+                    color: AppColors.mainWhite,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

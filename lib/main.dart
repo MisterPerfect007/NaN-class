@@ -7,6 +7,7 @@ import 'package:nan_class/features/home/presenter/bloc/home_bloc.dart';
 
 import 'appRoot/root.dart';
 import 'features/courses/data/datasources/course_remote_data_source.dart';
+import 'features/courses/presenter/bloc/course/course_bloc.dart';
 import 'features/courses/presenter/bloc/courses/courses_bloc.dart';
 
 void main() async {
@@ -29,9 +30,9 @@ class MyApp extends StatelessWidget {
           providers: [
             BlocProvider<HomeBloc>(create: (context) => HomeBloc()),
             BlocProvider<CoursesBloc>(create: (context) => CoursesBloc()),
+            BlocProvider<CourseBloc>(create: (context) => CourseBloc()),
           ],
-          child: Root(),
+          child: const Root(),
         ));
   }
 }
-

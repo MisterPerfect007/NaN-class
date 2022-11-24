@@ -43,7 +43,7 @@ class Section extends Equatable {
       withoutQuiz: json["withoutQuiz"],
       isPass: json["pass"],
       isActive: json["active"],
-      quiz: SectionQuiz.fromJson(json["quiz"]));
+      quiz: json["quiz"] != null ? SectionQuiz.fromJson(json["quiz"]) : null);
 
   @override
   List<Object?> get props => [
