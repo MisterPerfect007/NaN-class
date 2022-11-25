@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nan_class/core/package/internet_connection_checker.dart';
 import 'package:nan_class/features/home/data/datasources/user_remote_data_source.dart';
 import 'package:nan_class/features/loginAndRegister/domain/entity.dart';
 
@@ -13,10 +14,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeEvent>((event, emit) async {
       if(event is GetUser){
         emit(HomeLoading());
-        final failureOrUser = await getUserRemoteDataSource(event.googleUserId);
-        failureOrUser.fold(
-          (failure) => emit(HomeFailure(failure.error)), 
-          (user) => emit(HomeLoaded(user)));
+        if (await InternetConnection.hasConnection) {
+          final failureOrUser = await getUserRemoteDataSource(event.googleUserId);
+          failureOrUser.fold(
+            (failure) => emit(HomeFailure(failure.error)), 
+            (user) => emit(HomeLoaded(user)));
+        }else{
+          emit(const HomeFailure(UserErrorType.noInternet));
+        }
       }
     });
   }

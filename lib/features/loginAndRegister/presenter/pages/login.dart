@@ -36,11 +36,11 @@ class Login extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         color: Colors.white),
                   ),
-                  const SizedBox(height: 100),
+                  const SizedBox(height: 60),
                   const SocialMediaFormField(),
                   const SizedBox(height: 10),
                   const Text(
-                    "Sign in to your Google account and click enter",
+                    "Sign in with your Google account",
                     style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w500,

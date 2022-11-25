@@ -31,7 +31,7 @@ Future<Either<SectionFailure, CourseSectionModel>> getSectionsRemoteDataSource({
 
   try {
     response = await http
-        .post(Uri.https(apiBaseUrl, '/api/mobile/getCourseSections'),
+        .post(Uri.https(apiBaseUrl, '/api/mobile/getCourseSections/'),
             headers: {
               'auth': googleUserId,
               'Content-type': 'application/json',
@@ -62,9 +62,10 @@ Future<Either<SectionFailure, CourseSectionModel>> getSectionsRemoteDataSource({
       return const Left(SectionFailure(SectionErrorType.failedRequest));
     }
   } catch (e) {
-    return const Left(SectionFailure(SectionErrorType.networkError));
+    return const Left(SectionFailure(SectionErrorType.noInternet));
   }
 }
+
 
 class SectionFailure extends Equatable {
   final SectionErrorType error;
@@ -78,5 +79,6 @@ enum SectionErrorType {
   failedRequest,
   noSection,
   networkError,
-  unexpectedError
+  unexpectedError,
+  noInternet
 }

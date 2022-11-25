@@ -37,6 +37,6 @@ Future<Either<UserFailure, UserModel>> getUserRemoteDataSource(
       return const Left(UserFailure(UserErrorType.failedRequest));
     }
   } catch (e) {
-    return const Left(UserFailure(UserErrorType.networkError));
+    return const Left(UserFailure(UserErrorType.noInternet));
   }
 }

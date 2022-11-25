@@ -6,4 +6,5 @@ class AppColors {
   static const Color mainGreen = Color.fromRGBO(51, 255, 0, 1);
   static const Color mainWhite = Colors.white;
   static const Color mainred = Colors.red;
+  static const Color grey_1 = Color.fromARGB(255, 49, 50, 59);
 }

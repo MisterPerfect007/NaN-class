@@ -30,9 +30,9 @@ class MyApp extends StatelessWidget {
           providers: [
             BlocProvider<HomeBloc>(create: (context) => HomeBloc()),
             BlocProvider<CoursesBloc>(create: (context) => CoursesBloc()),
-            BlocProvider<CourseBloc>(create: (context) => CourseBloc()),
+            // BlocProvider<CourseBloc>(create: (context) => CourseBloc()),
           ],
-          child: const Root(),
+          child: const QuizPassing(),
         ));
   }
 }

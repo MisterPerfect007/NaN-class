@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nan_class/ui/colors/app_colors.dart';
 
+import '../widgets/question_with_multiple_answers/question_with_multiple_answers.dart';
+
 class QuizPassing extends StatefulWidget {
   const QuizPassing({super.key});
 
@@ -18,11 +20,13 @@ class _QuizPassingState extends State<QuizPassing> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            QuestionMultipleAnswers(),
+            QuestionWithMultipleAnswers(),
             const SizedBox(height: 20),
-            QuestionMultipleAnswers(),
+            QuestionWithMultipleAnswers(),
             const SizedBox(height: 20),
-            QuestionMultipleAnswers(),
+            QuestionWithMultipleAnswers(),
+            const SizedBox(height: 20),
+            QuestionWithSingleAnswers(),
           ],
         ),
       ),
@@ -30,30 +34,30 @@ class _QuizPassingState extends State<QuizPassing> {
   }
 }
 
-class QuestionMultipleAnswers extends StatefulWidget {
-  const QuestionMultipleAnswers({
+//
+//
+
+class QuestionWithSingleAnswers extends StatefulWidget {
+  const QuestionWithSingleAnswers({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<QuestionMultipleAnswers> createState() =>
-      _QuestionMultipleAnswersState();
+  State<QuestionWithSingleAnswers> createState() =>
+      _QuestionWithSingleAnswersState();
 }
 
-class _QuestionMultipleAnswersState extends State<QuestionMultipleAnswers> {
-  List<String> answers = [];
+class _QuestionWithSingleAnswersState extends State<QuestionWithSingleAnswers> {
+  String selectedAnswer = "";
 
   void setAnswer(String answer) {
-    if (answers.contains(answer)) {
-      setState(() {
-        answers.remove(answer);
-      });
-    } else {
-      setState(() {
-        answers.add(answer);
-      });
-    }
+    setState(() {
+      selectedAnswer = answer;
+    });
   }
+
+  
+  
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +81,9 @@ class _QuestionMultipleAnswersState extends State<QuestionMultipleAnswers> {
           Column(
             children: [
               //answer
-              MultiAnswer(setAnswer: setAnswer, answerText: 'Answer 1', answers: answers,),
+              SingleAnswer(answer: "answer 1", setAnswer: setAnswer, selectedAnswer: selectedAnswer,),
               const SizedBox(height: 10),
-              MultiAnswer(setAnswer: setAnswer, answerText: 'Answer 2', answers: answers,)
+              SingleAnswer(answer: "answer 2", setAnswer: setAnswer, selectedAnswer: selectedAnswer,),
             ],
           )
         ],
@@ -88,13 +92,16 @@ class _QuestionMultipleAnswersState extends State<QuestionMultipleAnswers> {
   }
 }
 
-class MultiAnswer extends StatelessWidget {
+
+class SingleAnswer extends StatelessWidget {
+  final String answer;
+  final String selectedAnswer;
   final void Function(String) setAnswer;
-  final String answerText;
-  final List<String> answers;
-  const MultiAnswer({
-    Key? key, required this.setAnswer, required this.answerText, required this.answers,
+  const SingleAnswer({
+    Key? key, required this.answer, required this.setAnswer, required this.selectedAnswer,
   }) : super(key: key);
+
+  bool get  isAnswerSelected => answer == selectedAnswer;
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +109,8 @@ class MultiAnswer extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () {
-          setAnswer(answerText);
+          setAnswer(answer);
+          print(answer + " . " + selectedAnswer);
         },
         child: Container(
           padding: const EdgeInsets.all(10),
@@ -115,56 +123,13 @@ class MultiAnswer extends StatelessWidget {
                 height: 20,
                 width: 20,
                 decoration: BoxDecoration(
-                    color: AppColors.mainWhite.withOpacity(0.5),
+                    color: isAnswerSelected? AppColors.mainGreen : AppColors.mainWhite.withOpacity(0.5),
                     borderRadius: const BorderRadius.all(Radius.circular(20))),
               ),
               const SizedBox(width: 20),
               Expanded(
                 child: Text(
-                  "$answers",
-                  // overflow: TextOverflow.clip,
-                  style: TextStyle(
-                    color: AppColors.mainWhite,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SingleAnswer extends StatelessWidget {
-  const SingleAnswer({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () {},
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          width: double.infinity,
-          color: AppColors.mainWhite.withOpacity(0.2),
-          child: Row(
-            children: [
-              // const SizedBox(width: 20),
-              Container(
-                height: 20,
-                width: 20,
-                decoration: BoxDecoration(
-                    color: AppColors.mainWhite.withOpacity(0.5),
-                    borderRadius: const BorderRadius.all(Radius.circular(20))),
-              ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Text(
-                  "This is a very very long long long answer wdhghjs db fubsdkjf dsfuhgs sdhsd sdfhdjflf",
+                  answer,
                   // overflow: TextOverflow.clip,
                   style: TextStyle(
                     color: AppColors.mainWhite,

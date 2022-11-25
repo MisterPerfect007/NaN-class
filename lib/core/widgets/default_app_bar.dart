@@ -12,7 +12,9 @@ AppBar defautAppBar(String title) {
       title,
       overflow: TextOverflow.ellipsis,
       style: const TextStyle(
-        fontWeight: FontWeight.w400,
+        color: Colors.white,
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
       ),
     ),
   );

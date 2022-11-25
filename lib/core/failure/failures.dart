@@ -10,6 +10,7 @@ class UserFailure extends Equatable{
 }
 
 enum UserErrorType{
+  noInternet,
   failedRequest,
   noUserFound,
   networkError,

@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nan_class/core/constants/constants.dart';
 import 'package:nan_class/core/widgets/default_app_bar.dart';
+import 'package:nan_class/core/widgets/loading_widget.dart';
 import 'package:nan_class/features/courses/presenter/bloc/course/course_bloc.dart';
 import 'package:nan_class/ui/colors/app_colors.dart';
 import 'package:nan_class/ui/svg_icons/svg_icons.dart';
 
+import '../../../../core/package/internet_connection_checker.dart';
+import '../../../../core/utils/utils.dart';
+import '../../../../core/widgets/animation/custom_opacity_animation.dart';
+import '../../../../core/widgets/error/error_widget.dart';
+import '../../data/datasources/course_remote_data_source.dart';
 import '../../data/models/course_section_model.dart';
 import '../../data/models/courses_model.dart';
 
@@ -21,19 +28,18 @@ class _CoursePageState extends State<CoursePage> {
   @override
   void initState() {
     super.initState();
+    callCourseSections(
+      context,
+      courseName: widget.monthCourse.name,
+      months: widget.monthCourse.months ?? [],
+      language: widget.monthCourse.language,
+      speciality: "FLUTTER",
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
-    context.read<CourseBloc>().add(GetCourseSections(
-          googleUserId: "116420318969971436809",
-          courseName: widget.monthCourse.name,
-          months: widget.monthCourse.months ?? [],
-          language: widget.monthCourse.language,
-          speciality: "FLUTTER",
-        ));
 
     return Scaffold(
       appBar: defautAppBar(widget.monthCourse.name),
@@ -41,15 +47,19 @@ class _CoursePageState extends State<CoursePage> {
         width: double.infinity,
         height: size.height,
         color: AppColors.darkBg,
-        child: const MainWidget(),
+        child: MainWidget(
+          monthCourse: widget.monthCourse,
+        ),
       ),
     );
   }
 }
 
 class MainWidget extends StatelessWidget {
+  final MonthCourse monthCourse;
   const MainWidget({
     Key? key,
+    required this.monthCourse,
   }) : super(key: key);
 
   @override
@@ -61,31 +71,84 @@ class MainWidget extends StatelessWidget {
         if (state is CourseLoaded) {
           //
           final List<Section> allSections = state.courseSections.sections;
-          return SizedBox(
-            height: height,
-            //
-            //build the sections 
-            child: ListView.builder(
-              padding: const EdgeInsets.all(20),
-              itemCount: allSections.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    SectionWidget(
-                      section: allSections[index],
-                    ),
-                  ],
-                );
-              },
+          //
+          return CustomOpacityAnimation(
+            child: SizedBox(
+              height: height,
+              //
+              //build the sections
+              child: ListView.builder(
+                padding: const EdgeInsets.all(20),
+                itemCount: allSections.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      SectionWidget(
+                        section: allSections[index],
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
           );
+        } else if (state is CourseLoading || state is CourseInitial) {
+          // loading
+          return const LoaderWidget();
+        } else if (state is CourseFailed) {
+          if (state.failure.error == SectionErrorType.noInternet) {
+            return CustomErrorWidget(
+              icon: SvgIcons.noWifiLine,
+              onPressed: () async {
+                if (!(await InternetConnection.hasConnection)) {
+                  showToast("you still offline");
+                } else {
+                  callCourseSections(
+                    context,
+                    courseName: monthCourse.name,
+                    months: monthCourse.months ?? [],
+                    language: monthCourse.language,
+                    speciality: "FLUTTER",
+                  );
+                }
+              },
+              msg: "No internet",
+            );
+          } 
         }
-        return Center(
-          child: Text("$state"),
+        return CustomErrorWidget(
+          icon: SvgIcons.badO,
+          onPressed: () {
+            callCourseSections(
+              context,
+              courseName: monthCourse.name,
+              months: monthCourse.months ?? [],
+              language: monthCourse.language,
+              speciality: "FLUTTER",
+            );
+          },
+          msg: "Something went wrong",
         );
       },
     );
   }
+}
+
+///Trigger the [GetCourseSections]
+void callCourseSections(
+  BuildContext context, {
+  required String courseName,
+  required List<String> months,
+  String? language,
+  String? speciality,
+}) {
+  context.read<CourseBloc>().add(GetCourseSections(
+        googleUserId: "116420318969971436809",
+        courseName: courseName,
+        months: months,
+        language: language,
+        speciality: speciality,
+      ));
 }
 
 class SectionWidget extends StatelessWidget {
@@ -102,23 +165,27 @@ class SectionWidget extends StatelessWidget {
     bool canUserPassTakeQuiz =
         section.withoutQuiz ? false : (section.isActive && !section.isPass);
     //
+    bool isActive = section.isActive;
 
     return Column(
       children: [
         Container(
-          color: AppColors.mainViolet,
-          child: ExpansionTile(
-            collapsedIconColor: AppColors.mainWhite,
-            title: Text(
-              section.name,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: Colors.white),
+          color: isActive ? AppColors.mainViolet : AppColors.grey_1,
+          child: IgnorePointer(
+            ignoring: !isActive,
+            child: ExpansionTile(
+              collapsedIconColor: AppColors.mainWhite,
+              title: Text(
+                section.name,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(color: Colors.white),
+              ),
+              children: [
+                SectionRessourceWidget(
+                  ressourseList: section.sectionRessourses,
+                )
+              ],
             ),
-            children: [
-              SectionRessourceWidget(
-                ressourseList: section.sectionRessourses,
-              )
-            ],
           ),
         ),
         const SizedBox(height: 5),
@@ -175,7 +242,9 @@ class SectionRessourceWidget extends StatelessWidget {
       return Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            print(apiBaseUrl + ressource.link);
+          },
           child: Container(
             padding: const EdgeInsets.all(10),
             color: AppColors.mainWhite.withOpacity(0.2),

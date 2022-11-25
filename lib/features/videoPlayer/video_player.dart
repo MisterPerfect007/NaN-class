@@ -24,7 +24,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     super.initState();
     _controller = VideoPlayerController.network(
       // 'https://nan.ci/ressources/videos/demo.mp4',
-      'https://assets.mixkit.co/videos/preview/mixkit-group-of-friends-partying-happily-4640-large.mp4',
+      // 'https://assets.mixkit.co/videos/preview/mixkit-group-of-friends-partying-happily-4640-large.mp4',
+      'https://classe.nan.ci/mobmed/video/FLUTTER/EN->4-build-foodpanda-uber-eats-clone-app-with-admin-web-portal_Oct_Nov/01_+-_+Introduction/001_+Introduction.mp4',
       // 'https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4',
       // closedCaptionFile: _loadCaptions(),
       videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
@@ -83,6 +84,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    //  print(_controller.);
     return _controller.value.isInitialized
         ? Center(
             child: GestureDetector(

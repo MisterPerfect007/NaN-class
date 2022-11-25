@@ -7,7 +7,12 @@ import 'package:nan_class/features/courses/presenter/bloc/course/course_bloc.dar
 import 'package:nan_class/ui/colors/app_colors.dart';
 import 'package:nan_class/ui/svg_icons/svg_icons.dart';
 
+import '../../../../core/package/internet_connection_checker.dart';
+import '../../../../core/utils/utils.dart';
 import '../../../../core/widgets/default_app_bar.dart';
+import '../../../../core/widgets/error/error_widget.dart';
+import '../../../../core/widgets/loading_widget.dart';
+import '../../data/datasources/courses_remote_data_source.dart';
 import '../bloc/courses/courses_bloc.dart';
 import 'course_page.dart';
 
@@ -20,14 +25,19 @@ class CoursesPage extends StatefulWidget {
 
 class _CoursesPageState extends State<CoursesPage>
     with AutomaticKeepAliveClientMixin<CoursesPage> {
+  //
+  @override
+  void initState() {
+    super.initState();
+    callCourses(context);
+  }
+
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
-    context.read<CoursesBloc>().add(const GetCourses("116420318969971436809"));
 
     Size size = MediaQuery.of(context).size;
 
@@ -37,21 +47,35 @@ class _CoursesPageState extends State<CoursesPage>
         width: size.width,
         height: size.height,
         color: AppColors.darkBg,
-        child: Container(
-          // padding: const EdgeInsets.all(20),
+        child: SizedBox(
           child: BlocBuilder<CoursesBloc, CoursesState>(
             builder: (context, state) {
               if (state is CoursesInitial || state is CoursesLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const LoaderWidget();
               } else if (state is CoursesLoaded) {
-                final courses = state.courses;
-                return CoursesLoadedWidget(size: size, courses: courses);
+                return CoursesLoadedWidget(courses: state.courses);
               } else if (state is CoursesFailed) {
-                return const Center(
-                  child: Text("Failed"),
-                );
+                if (state.errorType == CourseErrorType.noInternet) {
+                  return CustomErrorWidget(
+                    icon: SvgIcons.noWifiLine,
+                    onPressed: () async {
+                      if (!(await InternetConnection.hasConnection)) {
+                        showToast("you still offline");
+                      } else {
+                        callCourses(context);
+                      }
+                    },
+                    msg: "No internet",
+                  );
+                } else {
+                  return CustomErrorWidget(
+                    icon: SvgIcons.badO,
+                    onPressed: () {
+                      callCourses(context);
+                    },
+                    msg: "Something went wrong",
+                  );
+                }
               }
               return Container();
             },
@@ -62,26 +86,32 @@ class _CoursesPageState extends State<CoursesPage>
   }
 }
 
+///Trigger the [GetCourses] event
+///
+void callCourses(BuildContext context) {
+  context.read<CoursesBloc>().add(const GetCourses("116420318969971436809"));
+}
+
 class CoursesLoadedWidget extends StatelessWidget {
   const CoursesLoadedWidget({
     Key? key,
-    required this.size,
     required this.courses,
   }) : super(key: key);
 
-  final Size size;
   final List<Courses> courses;
 
   @override
   Widget build(BuildContext context) {
+    //
+    Size size = MediaQuery.of(context).size;
+    //
     return SizedBox(
       height: size.height,
       child: ListView.builder(
           padding: const EdgeInsets.all(20),
           itemCount: courses.length,
           itemBuilder: (context, index) {
-            final course = courses[index];
-            return CourseExpansionTile(course: course);
+            return CourseExpansionTile(course: courses[index]);
           }),
     );
   }

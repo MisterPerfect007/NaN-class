@@ -42,7 +42,7 @@ Future<Either<CourseFailure, List<CoursesModel>>> getCourcesRemoteDataSource(
       return const Left(CourseFailure(CourseErrorType.failedRequest));
     }
   } catch (e) {
-    return const Left(CourseFailure(CourseErrorType.networkError));
+    return const Left(CourseFailure(CourseErrorType.noInternet));
   }
 }
 
@@ -54,4 +54,4 @@ class CourseFailure extends Equatable {
   List<Object?> get props => [error];
 }
 
-enum CourseErrorType { failedRequest, noCourseFound, networkError }
+enum CourseErrorType { failedRequest, noCourseFound, networkError, noInternet }
