@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:nan_class/ui/colors/app_colors.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../core/utils/utils.dart';
+
 class VideoPlayerPage extends StatefulWidget {
   const VideoPlayerPage({super.key});
 
@@ -35,7 +37,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       // print(_controller.value.duration.inSeconds);
       setState(() {
         //Update the video current time
-        videoPlayingTime = videoTime(_controller.value.position.inSeconds);
+        videoPlayingTime = formatTimeMMSS(_controller.value.position.inSeconds);
       });
     });
     
@@ -140,7 +142,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                                     ),
                                     const SizedBox(width: 5),
                                     VideoTimeWidget(
-                                        videoPlayingTime: videoTime(_controller
+                                        videoPlayingTime: formatTimeMMSS(_controller
                                             .value.duration.inSeconds)),
                                   ])),
                           Padding(
@@ -240,15 +242,4 @@ class VideoTimeWidget extends StatelessWidget {
               ]),
         ));
   }
-}
-
-///Takes time in second and return a custom formated string to be display
-///
-///videoTime(69) will return "01:09"
-String videoTime(int time) {
-  int min = ((time >= 60) ? time / ~60 : 0).toInt();
-  int seconds = time % 60;
-  String secondsString = seconds <= 9 ? "0$seconds" : "$seconds";
-  String minString = min <= 9 ? "0$min" : "$min";
-  return "$minString : $secondsString";
 }
