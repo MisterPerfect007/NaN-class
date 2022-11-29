@@ -54,6 +54,8 @@ class _QuizPassingState extends State<QuizPassing> {
         print("Finishhhhhhhhhhhhhhhhhh");
         showCustomDialog(
           context,
+          icon: Icons.close,
+          topColor: AppColors.mainred,
           barrierColor: AppColors.darkBg,
           bodyText: 'Are you ready',
           title: 'Are you ready',
@@ -71,6 +73,8 @@ class _QuizPassingState extends State<QuizPassing> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => showCustomDialog(
           context,
+          icon: Icons.close,
+          topColor: AppColors.mainred,
           barrierColor: AppColors.darkBg,
           bodyText: 'Are you ready',
           title: 'Are you ready',

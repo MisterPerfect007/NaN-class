@@ -1,13 +1,16 @@
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-const String googleClientId =
-    '342579524909-ip6rf92vnse3n7bfid8e7s4aud2vajf2.apps.googleusercontent.com';
+import '../../../core/package/local_storage/keys.dart';
 
-class GoogleAuth {
-  static Future<GoogleSignInAccount?> signIn() async {
-    final googleSignIn = GoogleSignIn(serverClientId: googleClientId);
-    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-    if (googleUser == null) return null;
-    return googleUser;
+Future<bool> isUserLogedIn() async {
+  final prefs = await SharedPreferences.getInstance();
+  if(prefs.getString(googleUserIdKEY) != null){
+    return true;
   }
+  return false;
+}
+
+Future<String?> getUserGoogleIdFromLocal() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString(googleUserIdKEY);
 }

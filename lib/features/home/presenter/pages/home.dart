@@ -41,11 +41,13 @@ class HomeBody extends StatefulWidget {
 
 class _HomeBodyState extends State<HomeBody>
     with AutomaticKeepAliveClientMixin<HomeBody> {
+
+
   @override
   void initState() {
     super.initState();
-
-    callUserData(context);
+    //! check if state is not Loaded
+    // callUserData(context);
   }
 
   @override
@@ -100,5 +102,5 @@ class _HomeBodyState extends State<HomeBody>
 
 ///Trigger the [GetUser] event
 void callUserData(BuildContext context) {
-  context.read<HomeBloc>().add(const GetUser("116420318969971436809"));
+  context.read<HomeBloc>().add(const GetUser());
 }

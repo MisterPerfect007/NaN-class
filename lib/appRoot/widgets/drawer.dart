@@ -1,13 +1,26 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:nan_class/features/home/presenter/bloc/home_bloc.dart';
+import 'package:nan_class/features/loginAndRegister/presenter/pages/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/constants/constants.dart';
+import '../../core/package/local_storage/keys.dart';
+import '../../features/loginAndRegister/domain/entity.dart';
 import '../../ui/colors/app_colors.dart';
 import '../../ui/svg_icons/svg_icons.dart';
 
-class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({
-    Key? key,
-  }) : super(key: key);
+class CustomDrawer extends StatefulWidget {
+  final User user;
+  const CustomDrawer({Key? key, required this.user}) : super(key: key);
 
+  @override
+  State<CustomDrawer> createState() => _CustomDrawerState();
+}
+
+class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -27,40 +40,66 @@ class CustomDrawer extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 20, bottom: 20),
                   child: Column(
                     children: [
-                      Container(
-                        height: 100,
-                        width: 100,
-                        decoration: BoxDecoration(
-                            border: Border.all(),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(100))),
+                      //avatar
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: CachedNetworkImage(
+                          height: 80,
+                          width: 80,
+                          imageUrl: widget.user.avatar ?? "",
+                          fadeOutDuration: const Duration(milliseconds: 300),
+                          fadeInDuration: const Duration(milliseconds: 300),
+                        ),
                       ),
                       const SizedBox(height: 10),
-                      const Text(
-                        "Parfait Tapsoba",
-                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      Text(
+                        widget.user.login ?? '',
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.white),
                       )
                     ],
                   )),
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Column(
-                  children: const [
-                    SizedBox(height: 20),
-                    DrawerItem(
+                  children: [
+                    const SizedBox(height: 20),
+                    const DrawerItem(
                       text: "Week challenges",
                       icon: SvgIcons.calendarWeek,
                     ),
-                    SizedBox(height: 20),
-                    DrawerItem(
+                    const SizedBox(height: 20),
+                    const DrawerItem(
                       text: "My Ranking",
                       icon: SvgIcons.rankingStar,
                     ),
-                    SizedBox(height: 20),
-                    DrawerItem(
+                    const SizedBox(height: 20),
+                    const DrawerItem(
                       text: "My Calendar & Meets ",
                       icon: SvgIcons.calendar,
                     ),
+                    const SizedBox(height: 40),
+                    //Logout
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: logout,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.logout),
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                "Logout",
+                                style: TextStyle(color: AppColors.mainWhite),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -69,6 +108,23 @@ class CustomDrawer extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void logout() async {
+    final googleSignIn = GoogleSignIn(serverClientId: googleServerClientId);
+    googleSignIn.disconnect();
+    //
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove(googleUserIdKEY);
+    //
+    navigateTo(const Login());
+  }
+
+  //
+  //:separated method to access context
+  void navigateTo(Widget page) {
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) => page), (route) => false);
   }
 }
 

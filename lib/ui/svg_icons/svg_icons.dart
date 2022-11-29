@@ -29,6 +29,7 @@ enum SvgIcons {
   calendarWeek,
   baselineVideoFile,
   filePresent,
+  userBlock,
 }
 
 Map<SvgIcons, String> svgLink = {
@@ -59,6 +60,7 @@ Map<SvgIcons, String> svgLink = {
   SvgIcons.calendarWeek: 'assets/svg/calendar-week.svg',
   SvgIcons.baselineVideoFile: 'assets/svg/baseline-video-file.svg',
   SvgIcons.filePresent: 'assets/svg/file-present.svg',
+  SvgIcons.userBlock: 'assets/svg/user-block.svg',
 };
 
 class SvgIcon extends StatelessWidget {

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nan_class/features/Quizs/presenter/pages/quiz_passing.dart';
-import 'package:nan_class/features/courses/data/models/courses_model.dart';
-import 'package:nan_class/features/courses/presenter/pages/course_page.dart';
 import 'package:nan_class/features/home/presenter/bloc/home_bloc.dart';
+import 'package:nan_class/features/loginAndRegister/presenter/pages/login.dart';
+import 'package:nan_class/features/loginAndRegister/utils/google_auth.dart';
 
 import 'appRoot/root.dart';
-import 'features/courses/data/datasources/course_remote_data_source.dart';
-import 'features/courses/presenter/bloc/course/course_bloc.dart';
+import 'core/widgets/loaders/loading_page.dart';
 import 'features/courses/presenter/bloc/courses/courses_bloc.dart';
 
 void main() async {
@@ -26,13 +24,39 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: MultiBlocProvider(
-          providers: [
-            BlocProvider<HomeBloc>(create: (context) => HomeBloc()),
-            BlocProvider<CoursesBloc>(create: (context) => CoursesBloc()),
-            // BlocProvider<CourseBloc>(create: (context) => CourseBloc()),
-          ],
-          child: const Root(),
+        home: const LoginFlow()
+        // const Login(),
+        );
+  }
+}
+
+class LoginFlow extends StatelessWidget {
+  const LoginFlow({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider<HomeBloc>(create: (context) => HomeBloc()),
+          BlocProvider<CoursesBloc>(create: (context) => CoursesBloc()),
+          // BlocProvider<CourseBloc>(create: (context) => CourseBloc()),
+        ],
+        child: FutureBuilder<bool>(
+          future: isUserLogedIn(), // if user is loged in
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.data != null) {
+                if (snapshot.data!) {
+                  return const Root();
+                } else {
+                  return const Login();
+                }
+              }
+            }
+            return const LoadingPage();
+          },
         ));
   }
 }

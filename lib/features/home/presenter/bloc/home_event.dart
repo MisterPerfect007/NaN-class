@@ -8,9 +8,16 @@ abstract class HomeEvent extends Equatable {
 }
 
 class GetUser extends HomeEvent{
-  final String googleUserId;
-  const GetUser(this.googleUserId);
+  const GetUser();
 
   @override
-  List<Object> get props => [googleUserId];
+  List<Object> get props => [];
+}
+
+class SetUserLoadedState extends HomeEvent{
+  final User user;
+  const SetUserLoadedState(this.user);
+
+  @override
+  List<Object> get props => [user];
 }

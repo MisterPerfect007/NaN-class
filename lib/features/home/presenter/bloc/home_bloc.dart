@@ -12,17 +12,25 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeInitial()) {
     on<HomeEvent>((event, emit) async {
-      if(event is GetUser){
+      if (event is GetUser) {
         emit(HomeLoading());
         if (await InternetConnection.hasConnection) {
-          final failureOrUser = await getUserRemoteDataSource(event.googleUserId);
-          failureOrUser.fold(
-            (failure) => emit(HomeFailure(failure.error)), 
-            (user) => emit(HomeLoaded(user)));
-        }else{
+          final failureOrUser =
+              await getUserRemoteDataSource();
+          failureOrUser.fold((failure) => emit(HomeFailure(failure.error)),
+              (user) => emit(HomeLoaded(user)));
+        } else {
           emit(const HomeFailure(UserErrorType.noInternet));
         }
       }
+      
+      if (event is SetUserLoadedState) {
+        emit(HomeLoaded(event.user));
+      }
     });
+
+    /* void emitLoaded(User user, Emitter<HomeState> emit){
+      emit(HomeLoaded(user));
+    } */
   }
 }

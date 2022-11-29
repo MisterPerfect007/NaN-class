@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 Future showCustomDialog(
   BuildContext context, {
   Color? barrierColor,
+  required Color topColor,
+  required IconData icon,
   required String title,
   required String bodyText,
   required Function() onBtnTap,
@@ -23,7 +25,7 @@ Future showCustomDialog(
           Container(
             padding: const EdgeInsets.only(top: 5, bottom: 5),
             decoration: BoxDecoration(
-                color: Colors.red,
+                color: topColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(radius),
                   topRight: Radius.circular(radius),
@@ -65,7 +67,6 @@ Future showCustomDialog(
                 TextButton(
                     onPressed: () {
                       onBtnTap();
-                      Navigator.of(context).pop();
                     },
                     child: const Text("OK"))
               ],
