@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nan_class/features/Quizs/presenter/pages/quiz_passing.dart';
 import 'package:nan_class/features/home/presenter/bloc/home_bloc.dart';
 import 'package:nan_class/features/loginAndRegister/presenter/pages/login.dart';
 import 'package:nan_class/features/loginAndRegister/utils/google_auth.dart';
 
 import 'appRoot/root.dart';
 import 'core/widgets/loaders/loading_page.dart';
+import 'features/Quizs/data/dataSourses/quiz_remote_data_source.dart';
 import 'features/courses/presenter/bloc/courses/courses_bloc.dart';
 
 void main() async {
@@ -25,7 +27,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const LoginFlow()
+        home: const QuizPassing()
         // const Login(),
         );
   }
@@ -45,7 +47,7 @@ class LoginFlow extends StatelessWidget {
           // BlocProvider<CourseBloc>(create: (context) => CourseBloc()),
         ],
         child: FutureBuilder<bool>(
-          future: isUserLogedIn(), // if user is loged in
+          future: isUserLogedIn(), // if user is loged in or not
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.data != null) {

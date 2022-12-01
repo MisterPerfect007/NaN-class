@@ -16,3 +16,21 @@ enum UserErrorType{
   networkError,
   unexpectedError
 }
+
+class RequestFailure extends Equatable{
+  final RequestFailureType type;
+
+  const RequestFailure(this.type);
+
+  @override
+  List<Object?> get props => [type];
+
+}
+
+enum RequestFailureType{
+  noInternet,
+  noResultFound,
+  failedRequest,
+  networkError,
+  unexpectedError
+}

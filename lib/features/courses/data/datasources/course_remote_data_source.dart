@@ -55,7 +55,6 @@ Future<Either<SectionFailure, CourseSectionModel>> getSectionsRemoteDataSource({
     if (response.statusCode == 200) {
       //Response is ok
       final body = response.body;
-      print(jsonEncode(body));
 
       // final body = bodyString;
 

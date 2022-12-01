@@ -2,16 +2,17 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nan_class/core/widgets/loading_widget.dart';
 import 'package:nan_class/ui/colors/app_colors.dart';
+import 'package:nan_class/ui/svg_icons/svg_icons.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../core/utils/utils.dart';
+import '../../core/widgets/error/error_widget.dart';
 
 class VideoPlayerPage extends StatefulWidget {
   final String videoLink;
-  const VideoPlayerPage({super.key, 
-  required this.videoLink
-  });
+  const VideoPlayerPage({super.key, required this.videoLink});
 
   @override
   State<VideoPlayerPage> createState() => _VideoPlayerPageState();
@@ -29,7 +30,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     super.initState();
     // print(widget.videoLink);
     _controller = VideoPlayerController.network(
-      'https://' + widget.videoLink,
+      'https://${widget.videoLink}',
       // widget.videoLink,
       // 'https://classe.nan.ci/mobmed/videomob/FLUTTER/FR-%3Ematrisier_flutter_Oct_Nov/1-section_+one/Easy_+Nest.js_+Authentication_+With_+Passport.js_+__+(GraphQL_++_+Rest_+API).mp4',
       // 'https://assets.mixkit.co/videos/preview/mixkit-group-of-friends-partying-happily-4640-large.mp4',
@@ -37,13 +38,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     );
 
     _controller.addListener(() {
-      // print(_controller.value.duration.inSeconds);
       setState(() {
         //Update the video current time
         videoPlayingTime = formatTimeMMSS(_controller.value.position.inSeconds);
       });
     });
-    
+
     _controller.initialize();
   }
 
@@ -89,115 +89,123 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-     print(" >>>>>>>>>>>>>>>>>>>>>>> ${_controller.value.errorDescription}");
-    return _controller.value.isInitialized
-        ? Center(
-            child: GestureDetector(
-              onTap: () {
-                if (isPlayerCommandsShowed) {
-                  pauseOrResume();
-                }
-                else {
-                  setState(() {
-                    isPlayerCommandsShowed = true;
-                  });
-                }
-              },
-              child: SafeArea(
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: <Widget>[
-                    FittedBox(
-                      fit: BoxFit.cover,
-                      child: SizedBox(
-                        height: _controller.value.size.height,
-                        width: _controller.value.size.width,
-                        child: AspectRatio(
-                            aspectRatio: _controller.value.aspectRatio,
-                            child: VideoPlayer(_controller)),
-                      ),
-                    ),
+    return Scaffold(
+      backgroundColor: AppColors.darkBg,
+      body: buildBody(),
+    );
+  }
 
-                    //!controller
-                    if (isPlayerCommandsShowed)
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                              margin:
-                                  const EdgeInsets.only(left: 10, right: 10),
-                              child: Row(
-                                  // mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    VideoTimeWidget(
-                                        videoPlayingTime: videoPlayingTime),
-                                    const SizedBox(width: 5),
-                                    Expanded(
-                                      child: VideoProgressIndicator(
-                                        _controller,
-                                        allowScrubbing: true,
-                                        padding: const EdgeInsets.all(0),
-                                        colors: const VideoProgressColors(
-                                            playedColor: AppColors.mainViolet),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 5),
-                                    VideoTimeWidget(
-                                        videoPlayingTime: formatTimeMMSS(_controller
-                                            .value.duration.inSeconds)),
-                                  ])),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 10, right: 10, top: 5, bottom: 5),
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(20))),
-                                  child: Icon(
-                                    isPlaying()
-                                        ? Icons.pause
-                                        : Icons.play_arrow,
-                                    color: Colors.white,
-                                    shadows: const [
-                                      Shadow(color: Colors.black, blurRadius: 5)
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                    child: Container(
-                                  height: 0,
-                                )),
-                                Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap: setLandscapeOrPortrait,
-                                    child: const Icon(
-                                      Icons.fullscreen,
-                                      color: Colors.white,
-                                      shadows: [
-                                        Shadow(
-                                            color: Colors.black, blurRadius: 5)
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                  ],
+  Widget buildBody() {
+    if (_controller.value.isInitialized) {
+      return Center(
+        child: GestureDetector(
+          onTap: () {
+            if (isPlayerCommandsShowed) {
+              pauseOrResume();
+            } else {
+              setState(() {
+                isPlayerCommandsShowed = true;
+              });
+            }
+          },
+          child: SafeArea(
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: <Widget>[
+                FittedBox(
+                  fit: BoxFit.cover,
+                  child: SizedBox(
+                    height: _controller.value.size.height,
+                    width: _controller.value.size.width,
+                    child: AspectRatio(
+                        aspectRatio: _controller.value.aspectRatio,
+                        child: VideoPlayer(_controller)),
+                  ),
+                ),
+
+                //!controller
+                if (isPlayerCommandsShowed) buildPlayerCommands(),
+              ],
+            ),
+          ),
+        ),
+      );
+    } else if (_controller.value.hasError) {
+      return CustomErrorWidget(
+        icon: SvgIcons.badO,
+        msg: "Somthing went wrong, you should try again",
+        onPressed: () {
+          setState(() {
+            _controller.initialize();
+          });
+        },
+      );
+    }
+    return const LoaderWidget();
+  }
+
+  Column buildPlayerCommands() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+            margin: const EdgeInsets.only(left: 10, right: 10),
+            child: Row(
+                // mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  VideoTimeWidget(videoPlayingTime: videoPlayingTime),
+                  const SizedBox(width: 5),
+                  Expanded(
+                    child: VideoProgressIndicator(
+                      _controller,
+                      allowScrubbing: true,
+                      padding: const EdgeInsets.all(0),
+                      colors: const VideoProgressColors(
+                          playedColor: AppColors.mainViolet),
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  VideoTimeWidget(
+                      videoPlayingTime:
+                          formatTimeMMSS(_controller.value.duration.inSeconds)),
+                ])),
+        Padding(
+          padding:
+              const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.5),
+                    borderRadius: const BorderRadius.all(Radius.circular(20))),
+                child: Icon(
+                  isPlaying() ? Icons.pause : Icons.play_arrow,
+                  color: Colors.white,
+                  shadows: const [Shadow(color: Colors.black, blurRadius: 5)],
                 ),
               ),
-            ),
-          )
-        : Container();
+              Expanded(
+                  child: Container(
+                height: 0,
+              )),
+              Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: setLandscapeOrPortrait,
+                  child: const Icon(
+                    Icons.fullscreen,
+                    color: Colors.white,
+                    shadows: [Shadow(color: Colors.black, blurRadius: 5)],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   void setLandscapeOrPortrait() async {
