@@ -8,15 +8,13 @@ abstract class CourseEvent extends Equatable {
 }
 
 class GetCourseSections extends CourseEvent {
-  final String googleUserId;
-  final String? speciality;
   final String courseName;
   final List<String> months;
   final String? language;
+  final String? forr;
 
-  const GetCourseSections({
-    required this.googleUserId,
-    this.speciality,
+  const GetCourseSections( {
+    this.forr,
     required this.courseName,
     required this.months,
     this.language,
@@ -24,8 +22,7 @@ class GetCourseSections extends CourseEvent {
 
   @override
   List<Object> get props => [
-        googleUserId,
-        speciality!,
+        forr!,
         courseName,
         months,
         language!,

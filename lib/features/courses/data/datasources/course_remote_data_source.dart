@@ -5,7 +5,9 @@ import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:nan_class/core/constants/constants.dart';
+import 'package:nan_class/features/loginAndRegister/utils/google_auth.dart';
 
+import '../../utils/utils.dart';
 import '../models/course_section_model.dart';
 
 ///Get course sections data
@@ -13,20 +15,29 @@ import '../models/course_section_model.dart';
 ///return a [CourseSectionModel] when everything went fine
 ///or [SectionFailure] when somthing went wrong
 Future<Either<SectionFailure, CourseSectionModel>> getSectionsRemoteDataSource({
-  required String googleUserId,
-  String? speciality,
   required String courseName,
   List<String>? months,
+  String? forr,
   String? language,
 }) async {
-
+  //
+  String? googleUserId = await getUserGoogleIdFromLocal();
+  //
+  String? speciality = await getUserSpeciality();
+  //
+  ///* if [forr] is not null so we send "INTRO" as speciality
   final requestBody = {
-    "speciality": speciality ?? "INTRO",
+    "speciality": forr == null ? speciality?.toUpperCase() : "INTRO",
     "courseName": courseName,
     "months": months,
+    "for": forr,
     "language": language
   };
 
+  if (googleUserId == null) {
+    return const Left(SectionFailure(SectionErrorType.unexpectedError));
+  }
+  //
   final Response response;
 
   try {
@@ -44,8 +55,10 @@ Future<Either<SectionFailure, CourseSectionModel>> getSectionsRemoteDataSource({
     if (response.statusCode == 200) {
       //Response is ok
       final body = response.body;
+      print(jsonEncode(body));
+
       // final body = bodyString;
-      
+
       final Map<String, dynamic> jsonBody =
           Map<String, dynamic>.from(jsonDecode(body));
 
@@ -65,7 +78,6 @@ Future<Either<SectionFailure, CourseSectionModel>> getSectionsRemoteDataSource({
     return const Left(SectionFailure(SectionErrorType.noInternet));
   }
 }
-
 
 class SectionFailure extends Equatable {
   final SectionErrorType error;

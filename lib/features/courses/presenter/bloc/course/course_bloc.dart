@@ -15,15 +15,16 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
         emit(CourseLoading());
         if (await InternetConnection.hasConnection) {
           final resultOrFailure = await getSectionsRemoteDataSource(
-            googleUserId: event.googleUserId,
-            speciality: event.speciality,
+            forr: event.forr,
             courseName: event.courseName,
             months: event.months,
             language: event.language,
           );
 
           resultOrFailure.fold(
-            (failure) => emit(CourseFailed(failure)),
+            (failure) { 
+              print(failure);
+              emit(CourseFailed(failure));},
             (courseSections) => emit(CourseLoaded(courseSections)),
           );
         } else {

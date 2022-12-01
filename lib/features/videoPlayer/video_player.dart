@@ -8,7 +8,10 @@ import 'package:video_player/video_player.dart';
 import '../../core/utils/utils.dart';
 
 class VideoPlayerPage extends StatefulWidget {
-  const VideoPlayerPage({super.key});
+  final String videoLink;
+  const VideoPlayerPage({super.key, 
+  required this.videoLink
+  });
 
   @override
   State<VideoPlayerPage> createState() => _VideoPlayerPageState();
@@ -24,12 +27,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   @override
   void initState() {
     super.initState();
+    // print(widget.videoLink);
     _controller = VideoPlayerController.network(
-      // 'https://nan.ci/ressources/videos/demo.mp4',
+      'https://' + widget.videoLink,
+      // widget.videoLink,
+      // 'https://classe.nan.ci/mobmed/videomob/FLUTTER/FR-%3Ematrisier_flutter_Oct_Nov/1-section_+one/Easy_+Nest.js_+Authentication_+With_+Passport.js_+__+(GraphQL_++_+Rest_+API).mp4',
       // 'https://assets.mixkit.co/videos/preview/mixkit-group-of-friends-partying-happily-4640-large.mp4',
-      'https://classe.nan.ci/mobmed/video/FLUTTER/EN->4-build-foodpanda-uber-eats-clone-app-with-admin-web-portal_Oct_Nov/01_+-_+Introduction/001_+Introduction.mp4',
-      // 'https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4',
-      // closedCaptionFile: _loadCaptions(),
       videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
     );
 
@@ -87,7 +90,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   @override
   Widget build(BuildContext context) {
     print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-    //  print(_controller.);
+     print(" >>>>>>>>>>>>>>>>>>>>>>> ${_controller.value.errorDescription}");
     return _controller.value.isInitialized
         ? Center(
             child: GestureDetector(

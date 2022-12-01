@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    
     return MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
@@ -49,6 +50,7 @@ class LoginFlow extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.data != null) {
                 if (snapshot.data!) {
+                  
                   return const Root();
                 } else {
                   return const Login();

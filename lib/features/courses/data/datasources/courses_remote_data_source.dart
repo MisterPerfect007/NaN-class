@@ -42,6 +42,7 @@ Future<Either<CourseFailure, List<CoursesModel>>> getCourcesRemoteDataSource(
       return const Left(CourseFailure(CourseErrorType.failedRequest));
     }
   } catch (e) {
+    print(e);
     return const Left(CourseFailure(CourseErrorType.noInternet));
   }
 }

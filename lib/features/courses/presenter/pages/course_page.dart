@@ -11,6 +11,7 @@ import '../../../../core/package/internet_connection_checker.dart';
 import '../../../../core/utils/utils.dart';
 import '../../../../core/widgets/animation/custom_opacity_animation.dart';
 import '../../../../core/widgets/error/error_widget.dart';
+import '../../../videoPlayer/video_player.dart';
 import '../../data/datasources/course_remote_data_source.dart';
 import '../../data/models/course_section_model.dart';
 import '../../data/models/courses_model.dart';
@@ -28,13 +29,11 @@ class _CoursePageState extends State<CoursePage> {
   @override
   void initState() {
     super.initState();
-    callCourseSections(
-      context,
-      courseName: widget.monthCourse.name,
-      months: widget.monthCourse.months ?? [],
-      language: widget.monthCourse.language,
-      speciality: "FLUTTER",
-    );
+    callCourseSections(context,
+        courseName: widget.monthCourse.name,
+        months: widget.monthCourse.months ?? [],
+        language: widget.monthCourse.language,
+        forr: widget.monthCourse.forr);
   }
 
   @override
@@ -103,29 +102,25 @@ class MainWidget extends StatelessWidget {
                 if (!(await InternetConnection.hasConnection)) {
                   showToast("you still offline");
                 } else {
-                  callCourseSections(
-                    context,
-                    courseName: monthCourse.name,
-                    months: monthCourse.months ?? [],
-                    language: monthCourse.language,
-                    speciality: "FLUTTER",
-                  );
+                  callCourseSections(context,
+                      courseName: monthCourse.name,
+                      months: monthCourse.months ?? [],
+                      language: monthCourse.language,
+                      forr: monthCourse.forr);
                 }
               },
               msg: "No internet",
             );
-          } 
+          }
         }
         return CustomErrorWidget(
           icon: SvgIcons.badO,
           onPressed: () {
-            callCourseSections(
-              context,
-              courseName: monthCourse.name,
-              months: monthCourse.months ?? [],
-              language: monthCourse.language,
-              speciality: "FLUTTER",
-            );
+            callCourseSections(context,
+                courseName: monthCourse.name,
+                months: monthCourse.months ?? [],
+                language: monthCourse.language,
+                forr: monthCourse.forr);
           },
           msg: "Something went wrong",
         );
@@ -140,14 +135,13 @@ void callCourseSections(
   required String courseName,
   required List<String> months,
   String? language,
-  String? speciality,
+  String? forr,
 }) {
   context.read<CourseBloc>().add(GetCourseSections(
-        googleUserId: "116420318969971436809",
+        forr: forr,
         courseName: courseName,
         months: months,
         language: language,
-        speciality: speciality,
       ));
 }
 
@@ -196,9 +190,7 @@ class SectionWidget extends StatelessWidget {
             color: Colors.transparent,
             child: InkWell(
               onTap: () {},
-              // splashColor: Colors.red,
               child: Row(
-                //  mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   SizedBox(width: 15),
                   SvgIcon(
@@ -231,6 +223,7 @@ class SectionRessourceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print(apiBaseUrl + ressourseList.first.link);
     //
     return Column(
         children: ressourseList.map((ressource) {
@@ -244,6 +237,16 @@ class SectionRessourceWidget extends StatelessWidget {
         child: InkWell(
           onTap: () {
             print(apiBaseUrl + ressource.link);
+            //
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => VideoPlayerPage(
+                        videoLink: apiBaseUrl + ressource.link,
+                      )),
+            );
+
+            //! Go to videoPlayer if it is a video
           },
           child: Container(
             padding: const EdgeInsets.all(10),
