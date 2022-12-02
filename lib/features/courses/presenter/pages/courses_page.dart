@@ -127,6 +127,7 @@ class CourseExpansionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print(course);
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       child: Column(
@@ -140,8 +141,10 @@ class CourseExpansionTile extends StatelessWidget {
                   style: const TextStyle(color: Colors.white),
                 ),
                 collapsedIconColor: Colors.white,
-                leading: SvgPicture.asset("assets/app/content/closed-book.svg",
-                    width: 30),
+                leading: SvgPicture.asset(
+                  "assets/app/content/closed-book.svg",
+                  width: 30,
+                ),
                 children: List<Widget>.from(
                     course.courses.map((monthCourse) => ListTile(
                           title: Container(

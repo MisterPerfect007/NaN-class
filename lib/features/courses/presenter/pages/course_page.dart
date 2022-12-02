@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nan_class/core/constants/constants.dart';
 import 'package:nan_class/core/widgets/default_app_bar.dart';
 import 'package:nan_class/core/widgets/loading_widget.dart';
+import 'package:nan_class/features/Quizs/presenter/bloc/quiz_bloc.dart';
+import 'package:nan_class/features/Quizs/presenter/pages/quiz_passing.dart';
 import 'package:nan_class/features/courses/presenter/bloc/course/course_bloc.dart';
 import 'package:nan_class/ui/colors/app_colors.dart';
 import 'package:nan_class/ui/svg_icons/svg_icons.dart';
@@ -40,6 +42,7 @@ class _CoursePageState extends State<CoursePage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
+    print(widget.monthCourse.name);
     return Scaffold(
       appBar: defautAppBar(widget.monthCourse.name),
       body: Container(
@@ -84,6 +87,7 @@ class MainWidget extends StatelessWidget {
                     children: [
                       SectionWidget(
                         section: allSections[index],
+                        courseName: monthCourse.name,
                       ),
                     ],
                   );
@@ -146,11 +150,13 @@ void callCourseSections(
 }
 
 class SectionWidget extends StatelessWidget {
+  final String courseName;
   final Section section;
 
   const SectionWidget({
     Key? key,
     required this.section,
+    required this.courseName,
   }) : super(key: key);
 
   @override
@@ -189,7 +195,20 @@ class SectionWidget extends StatelessWidget {
           Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider(
+                      create: (context) => QuizBloc(),
+                      child: QuizPassing(
+                        courseName: courseName,
+                        sectionName: section.name,
+                      ),
+                    ),
+                  ),
+                );
+              },
               child: Row(
                 children: const [
                   SizedBox(width: 15),

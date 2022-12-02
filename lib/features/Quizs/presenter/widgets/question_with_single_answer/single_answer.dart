@@ -18,43 +18,46 @@ class SingleAnswer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () {
-          setAnswer(answer);
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            setAnswer(answer);
 
-          print("$answer . $selectedAnswer");
-        },
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          width: double.infinity,
-          color: AppColors.mainWhite.withOpacity(0.2),
-          child: Row(
-            children: [
-              // const SizedBox(width: 20),
-              Container(
-                height: 20,
-                width: 20,
-                decoration: BoxDecoration(
-                    color: isAnswerSelected
-                        ? AppColors.mainGreen
-                        : AppColors.mainWhite.withOpacity(0.5),
-                    borderRadius: const BorderRadius.all(Radius.circular(20))),
-              ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Text(
-                  answer,
-                  // overflow: TextOverflow.clip,
-                  style: TextStyle(
-                    color: isAnswerSelected
-                        ? AppColors.mainGreen
-                        : AppColors.mainWhite,
+            print("$answer . $selectedAnswer");
+          },
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            width: double.infinity,
+            color: AppColors.mainWhite.withOpacity(0.2),
+            child: Row(
+              children: [
+                // const SizedBox(width: 20),
+                Container(
+                  height: 20,
+                  width: 20,
+                  decoration: BoxDecoration(
+                      color: isAnswerSelected
+                          ? AppColors.mainGreen
+                          : AppColors.mainWhite.withOpacity(0.5),
+                      borderRadius: const BorderRadius.all(Radius.circular(20))),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Text(
+                    answer,
+                    // overflow: TextOverflow.clip,
+                    style: TextStyle(
+                      color: isAnswerSelected
+                          ? AppColors.mainGreen
+                          : AppColors.mainWhite,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

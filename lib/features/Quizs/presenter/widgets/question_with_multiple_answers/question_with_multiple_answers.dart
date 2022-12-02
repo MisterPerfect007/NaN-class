@@ -2,10 +2,12 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../ui/colors/app_colors.dart';
+import '../../../data/models/quiz_model.dart';
 
 class QuestionWithMultipleAnswers extends StatefulWidget {
+  final Question question;
   const QuestionWithMultipleAnswers({
-    Key? key,
+    Key? key, required this.question,
   }) : super(key: key);
 
   @override
@@ -28,7 +30,7 @@ class _QuestionWithMultipleAnswersState extends State<QuestionWithMultipleAnswer
     }
   }
 
-  
+   
   
 
   @override
@@ -41,23 +43,29 @@ class _QuestionWithMultipleAnswersState extends State<QuestionWithMultipleAnswer
       padding: const EdgeInsets.all(10),
       child: Column(
         children: [
-          const Text(
-            "1. What's Flutter this is the question What's Flutter this is the question What's Flutter this is the question",
-            style: TextStyle(
+          Text(
+            widget.question.question,
+            style: const TextStyle(
               color: AppColors.mainWhite,
               fontSize: 18,
               fontWeight: FontWeight.w500,
             ),
           ),
           const SizedBox(height: 20),
-          Column(
+          ListView.builder(
+             itemCount: widget.question.answers.length,
+            itemBuilder:(context, index) {
+              String answer = widget.question.answers[index];
+              return MultiAnswer(setAnswer: setAnswer, answerText: answer, answers: answers,);
+          },),
+          /* Column(
             children: [
               //answer
               MultiAnswer(setAnswer: setAnswer, answerText: 'Answer 1', answers: answers,),
               const SizedBox(height: 10),
               MultiAnswer(setAnswer: setAnswer, answerText: 'Answer 2', answers: answers,)
             ],
-          )
+          ) */
         ],
       ),
     );

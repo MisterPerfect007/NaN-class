@@ -8,10 +8,12 @@ import 'package:nan_class/features/loginAndRegister/utils/google_auth.dart';
 import 'appRoot/root.dart';
 import 'core/widgets/loaders/loading_page.dart';
 import 'features/Quizs/data/dataSourses/quiz_remote_data_source.dart';
+import 'features/Quizs/presenter/bloc/quiz_bloc.dart';
 import 'features/courses/presenter/bloc/courses/courses_bloc.dart';
 
 void main() async {
   runApp(const MyApp());
+  // print(await getQuizRemoteDataSource(courseName: '1-cours-one-maining', sectionName: 'Introduction'));
 }
 
 class MyApp extends StatelessWidget {
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const QuizPassing()
+        home: const LoginFlow(),
         // const Login(),
         );
   }
@@ -44,6 +46,8 @@ class LoginFlow extends StatelessWidget {
         providers: [
           BlocProvider<HomeBloc>(create: (context) => HomeBloc()),
           BlocProvider<CoursesBloc>(create: (context) => CoursesBloc()),
+          BlocProvider<QuizBloc>(create: (context) => QuizBloc(),),
+          
           // BlocProvider<CourseBloc>(create: (context) => CourseBloc()),
         ],
         child: FutureBuilder<bool>(

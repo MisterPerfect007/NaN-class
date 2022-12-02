@@ -24,7 +24,6 @@ Future<Either<RequestFailure, QuizModel>> getQuizRemoteDataSource({
   String? googleUserId = await getUserGoogleIdFromLocal();
   //
   
-
   if (googleUserId == null) {
     return const Left(RequestFailure(RequestFailureType.unexpectedError));
   }

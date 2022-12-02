@@ -1,12 +1,14 @@
-
 import 'package:flutter/material.dart';
 import 'package:nan_class/features/Quizs/presenter/widgets/question_with_single_answer/single_answer.dart';
 
 import '../../../../../ui/colors/app_colors.dart';
+import '../../../data/models/quiz_model.dart';
 
 class QuestionWithSingleAnswers extends StatefulWidget {
+  final Question question;
   const QuestionWithSingleAnswers({
     Key? key,
+    required this.question,
   }) : super(key: key);
 
   @override
@@ -25,17 +27,22 @@ class _QuestionWithSingleAnswersState extends State<QuestionWithSingleAnswers> {
 
   @override
   Widget build(BuildContext context) {
+    //
+    Question question = widget.question;
+
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
           color: AppColors.mainViolet,
           borderRadius: BorderRadius.all(Radius.circular(10))),
       padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.only(bottom: 10),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-            "1. What's Flutter this is the question What's Flutter this is the question What's Flutter this is the question",
-            style: TextStyle(
+          Text(
+            question.question,
+            style: const TextStyle(
               color: AppColors.mainWhite,
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -43,21 +50,14 @@ class _QuestionWithSingleAnswersState extends State<QuestionWithSingleAnswers> {
           ),
           const SizedBox(height: 20),
           Column(
-            children: [
-              //answer
-              SingleAnswer(
-                answer: "answer 1",
-                setAnswer: setAnswer,
-                selectedAnswer: selectedAnswer,
-              ),
-              const SizedBox(height: 10),
-              SingleAnswer(
-                answer: "answer 2",
-                setAnswer: setAnswer,
-                selectedAnswer: selectedAnswer,
-              ),
-            ],
-          )
+            children: List<Widget>.generate(
+                question.answers.length,
+                (index) => SingleAnswer(
+                    answer: question.answers[index],
+                    setAnswer: setAnswer,
+                    selectedAnswer: selectedAnswer)),
+          ),
+
         ],
       ),
     );
