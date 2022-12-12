@@ -1,5 +1,8 @@
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nan_class/ui/colors/app_colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../package/local_storage/keys.dart';
 
 void showToast(String message){
   Fluttertoast.showToast(
@@ -23,4 +26,10 @@ String formatTimeMMSS(int time) {
   String minString = min <= 9 ? "0$min" : "$min";
 
   return "$minString : $secondsString";
+}
+
+
+Future<String?> getUserSpeciality() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString(userSpecialityKEY);
 }

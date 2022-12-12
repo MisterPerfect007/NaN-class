@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../../core/utils/utils.dart';
 import '../../../../../ui/colors/app_colors.dart';
 
-PreferredSize buildQuizPassingAppBar({required int quizTime, required Color color}) {
+PreferredSize buildQuizPassingAppBar({required int? quizTime, required Color color}) {
 
   return PreferredSize(
     preferredSize: const Size(double.infinity, 60),
@@ -65,7 +65,7 @@ PreferredSize buildQuizPassingAppBar({required int quizTime, required Color colo
               padding: const EdgeInsets.all(10),
               child: Center(
                 child: Text(
-                  formatTimeMMSS(quizTime),
+                  quizTime != null ? formatTimeMMSS(quizTime) : '00:00',
                   style:
                       TextStyle(fontSize: 16, color: color, fontWeight: FontWeight.w500),
                 ),

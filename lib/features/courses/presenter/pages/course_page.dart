@@ -165,7 +165,7 @@ class SectionWidget extends StatelessWidget {
     bool canUserPassTakeQuiz =
         section.withoutQuiz ? false : (section.isActive && !section.isPass);
     //
-    bool isActive = section.isActive;
+    bool isActive = section.isActive || section.isPass || section.withoutQuiz;
 
     return Column(
       children: [

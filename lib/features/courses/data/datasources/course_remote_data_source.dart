@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:nan_class/core/constants/constants.dart';
 import 'package:nan_class/features/loginAndRegister/utils/google_auth.dart';
 
+import '../../../../core/utils/utils.dart';
 import '../../utils/utils.dart';
 import '../models/course_section_model.dart';
 
@@ -24,6 +25,9 @@ Future<Either<SectionFailure, CourseSectionModel>> getSectionsRemoteDataSource({
   String? googleUserId = await getUserGoogleIdFromLocal();
   //
   String? speciality = await getUserSpeciality();
+
+  print(">>>>>>>>>>>>>>>>>>>>>>>>$speciality");
+  print(">>>>>>>>>>>>>>>>>>>>>>>>google ID:$googleUserId");
   //
   ///* if [forr] is not null so we send "INTRO" as speciality
   final requestBody = {
@@ -33,6 +37,8 @@ Future<Either<SectionFailure, CourseSectionModel>> getSectionsRemoteDataSource({
     "for": forr,
     "language": language
   };
+
+  print(requestBody);
 
   if (googleUserId == null) {
     return const Left(SectionFailure(SectionErrorType.unexpectedError));
@@ -52,6 +58,7 @@ Future<Either<SectionFailure, CourseSectionModel>> getSectionsRemoteDataSource({
             encoding: Encoding.getByName("utf-8"))
         .timeout(const Duration(seconds: 60));
 
+      print(response.body);
     if (response.statusCode == 200) {
       //Response is ok
       final body = response.body;

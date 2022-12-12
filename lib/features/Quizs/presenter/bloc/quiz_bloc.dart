@@ -25,6 +25,12 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
           emit(const QuizFailed(RequestFailure(RequestFailureType.noInternet)));
         }
       }
+      /* else if(event is SetQuizLoaded){
+        emit(QuizLoaded(event.quiz));
+      }
+      else if(event is SetQuizLoading){
+        emit(QuizLoading());
+      } */
     });
   }
 }

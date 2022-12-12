@@ -22,3 +22,21 @@ class GetQuiz extends QuizEvent {
         sectionName,
       ];
 }
+/* 
+class SetQuizLoaded extends QuizEvent {
+  final QuizModel quiz;
+
+  const SetQuizLoaded(this.quiz);
+
+  @override
+  List<Object> get props => [quiz];
+}
+
+class SetQuizLoading extends QuizEvent {
+
+  const SetQuizLoading();
+
+  @override
+  List<Object> get props => [];
+}
+ */

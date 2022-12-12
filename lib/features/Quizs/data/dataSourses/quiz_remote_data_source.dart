@@ -9,8 +9,6 @@ import 'package:nan_class/features/loginAndRegister/utils/google_auth.dart';
 
 import '../../../../core/failure/failures.dart';
 
-
-
 ///Get quiz
 ///
 ///return a [QuizModel] when everything went fine
@@ -18,12 +16,11 @@ import '../../../../core/failure/failures.dart';
 Future<Either<RequestFailure, QuizModel>> getQuizRemoteDataSource({
   required String courseName,
   required String sectionName,
-
 }) async {
   //
   String? googleUserId = await getUserGoogleIdFromLocal();
   //
-  
+
   if (googleUserId == null) {
     return const Left(RequestFailure(RequestFailureType.unexpectedError));
   }
@@ -31,15 +28,18 @@ Future<Either<RequestFailure, QuizModel>> getQuizRemoteDataSource({
   final Response response;
 
   try {
-    response = await http
-    //!http
-        .get(Uri.http(localApiUrl, '/api/mobile/getQuiz/$courseName/$sectionName'),
-            headers: {
-              'auth': googleUserId,
-              'Content-type': 'application/json',
-              'Accept': 'application/json',
-            },)
-        .timeout(const Duration(seconds: 60));
+
+    response = await http.get(
+      Uri.https(apiBaseUrl, '/api/mobile/getQuiz/$courseName/$sectionName'),
+      headers: {
+        'auth': googleUserId,
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+      },
+    ).timeout(const Duration(seconds: 60));
+
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    print(response.body);
 
     if (response.statusCode == 200) {
       //Response is ok
