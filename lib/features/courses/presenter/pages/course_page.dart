@@ -11,8 +11,11 @@ import 'package:nan_class/ui/svg_icons/svg_icons.dart';
 
 import '../../../../core/package/internet_connection_checker.dart';
 import '../../../../core/utils/utils.dart';
+import '../../../../core/widgets/alertDialog/custom_alert_dialog.dart';
 import '../../../../core/widgets/animation/custom_opacity_animation.dart';
 import '../../../../core/widgets/error/error_widget.dart';
+import '../../../Quizs/data/dataSourses/quiz_remote_data_source.dart';
+import '../../../Quizs/data/models/quiz_model.dart';
 import '../../../videoPlayer/video_player.dart';
 import '../../data/datasources/course_remote_data_source.dart';
 import '../../data/models/course_section_model.dart';
@@ -149,7 +152,7 @@ void callCourseSections(
       ));
 }
 
-class SectionWidget extends StatelessWidget {
+class SectionWidget extends StatefulWidget {
   final String courseName;
   final Section section;
 
@@ -160,12 +163,20 @@ class SectionWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<SectionWidget> createState() => _SectionWidgetState();
+}
+
+class _SectionWidgetState extends State<SectionWidget> {
+  @override
   Widget build(BuildContext context) {
     //
-    bool canUserPassTakeQuiz =
-        section.withoutQuiz ? false : (section.isActive && !section.isPass);
+    bool canUserPassTakeQuiz = widget.section.withoutQuiz
+        ? false
+        : (widget.section.isActive && !widget.section.isPass);
     //
-    bool isActive = section.isActive || section.isPass || section.withoutQuiz;
+    bool isActive = widget.section.isActive ||
+        widget.section.isPass ||
+        widget.section.withoutQuiz;
 
     return Column(
       children: [
@@ -176,13 +187,13 @@ class SectionWidget extends StatelessWidget {
             child: ExpansionTile(
               collapsedIconColor: AppColors.mainWhite,
               title: Text(
-                section.name,
+                widget.section.name,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(color: Colors.white),
               ),
               children: [
                 SectionRessourceWidget(
-                  ressourseList: section.sectionRessourses,
+                  ressourseList: widget.section.sectionRessourses,
                 )
               ],
             ),
@@ -195,19 +206,37 @@ class SectionWidget extends StatelessWidget {
           Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                      create: (context) => QuizBloc(),
-                      child: QuizPassing(
-                        courseName: courseName,
-                        sectionName: section.name,
-                      ),
-                    ),
-                  ),
-                );
+              onTap: () async {
+                //
+                final quiz = await getQuizData();
+                if (quiz != null && mounted) {
+                  showCustomDialog(
+                    context,
+                    topColor: Colors.red,
+                    icon: Icons.close,
+                    title: "Are you ready",
+                    bodyText: "ready",
+                    onBtnTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => QuizPassing(quiz: quiz),
+                          ));
+                    },
+                  );
+                } else if (mounted) {
+                  showCustomDialog(
+                    context,
+                    topColor: Colors.red,
+                    icon: Icons.close,
+                    title: "Failed to load quiz questions",
+                    bodyText: "Please try again",
+                    onBtnTap: () {
+                      Navigator.pop(context);
+                    },
+                  );
+                }
               },
               child: Row(
                 children: const [
@@ -231,7 +260,29 @@ class SectionWidget extends StatelessWidget {
       ],
     );
   }
+
+  Future<QuizModel?> getQuizData() async {
+    QuizModel? isDataLoaded;
+    showLoadingDialog(context);
+    //call quiz data
+    final quizOrFailure = await getQuizRemoteDataSource(
+        courseName: widget.courseName, sectionName: widget.section.name);
+    quizOrFailure.fold((failure) {}, (quiz) {
+      isDataLoaded = quiz;
+    });
+    //
+    if (mounted) {
+      if (_isThereCurrentDialogShowing(context)) {
+        Navigator.pop(context);
+      }
+    }
+    return isDataLoaded;
+  }
 }
+
+///Check if there a dialog showing
+bool _isThereCurrentDialogShowing(BuildContext context) =>
+    ModalRoute.of(context)?.isCurrent != true;
 
 class SectionRessourceWidget extends StatelessWidget {
   final List<SectionRessourse> ressourseList;
@@ -254,19 +305,21 @@ class SectionRessourceWidget extends StatelessWidget {
       return Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {
-            print(apiBaseUrl + ressource.link);
-            //
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => VideoPlayerPage(
-                        videoLink: apiBaseUrl + ressource.link,
-                      )),
-            );
+          onTap: isVideo
+              ? () {
+                  print(apiBaseUrl + ressource.link);
+                  //
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => VideoPlayerPage(
+                              videoLink: apiBaseUrl + ressource.link,
+                            )),
+                  );
 
-            //! Go to videoPlayer if it is a video
-          },
+                  //! Go to videoPlayer if it is a video
+                }
+              : () {},
           child: Container(
             padding: const EdgeInsets.all(10),
             color: AppColors.mainWhite.withOpacity(0.2),

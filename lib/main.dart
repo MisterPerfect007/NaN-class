@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nan_class/features/Quizs/data/dataSourses/set_quiz_start.dart';
 import 'package:nan_class/features/Quizs/presenter/pages/quiz_passing.dart';
 import 'package:nan_class/features/home/presenter/bloc/home_bloc.dart';
 import 'package:nan_class/features/loginAndRegister/presenter/pages/login.dart';
@@ -13,7 +14,6 @@ import 'features/courses/presenter/bloc/courses/courses_bloc.dart';
 
 void main() async {
   runApp(const MyApp());
-  // print(await getQuizRemoteDataSource(courseName: '1-cours-one-maining', sectionName: 'Introduction'));
 }
 
 class MyApp extends StatelessWidget {
@@ -22,16 +22,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    
     return MaterialApp(
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: const LoginFlow(),
-        // const Login(),
-        );
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const LoginFlow(),
+      // const Login(),
+    );
   }
 }
 
@@ -46,8 +45,10 @@ class LoginFlow extends StatelessWidget {
         providers: [
           BlocProvider<HomeBloc>(create: (context) => HomeBloc()),
           BlocProvider<CoursesBloc>(create: (context) => CoursesBloc()),
-          BlocProvider<QuizBloc>(create: (context) => QuizBloc(),),
-          
+          BlocProvider<QuizBloc>(
+            create: (context) => QuizBloc(),
+          ),
+
           // BlocProvider<CourseBloc>(create: (context) => CourseBloc()),
         ],
         child: FutureBuilder<bool>(
@@ -56,7 +57,6 @@ class LoginFlow extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.data != null) {
                 if (snapshot.data!) {
-                  
                   return const Root();
                 } else {
                   return const Login();

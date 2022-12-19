@@ -26,8 +26,8 @@ Future<Either<SectionFailure, CourseSectionModel>> getSectionsRemoteDataSource({
   //
   String? speciality = await getUserSpeciality();
 
-  print(">>>>>>>>>>>>>>>>>>>>>>>>$speciality");
-  print(">>>>>>>>>>>>>>>>>>>>>>>>google ID:$googleUserId");
+  // print(">>>>>>>>>>>>>>>>>>>>>>>>$speciality");
+  // print(">>>>>>>>>>>>>>>>>>>>>>>>google ID:$googleUserId");
   //
   ///* if [forr] is not null so we send "INTRO" as speciality
   final requestBody = {
@@ -38,7 +38,7 @@ Future<Either<SectionFailure, CourseSectionModel>> getSectionsRemoteDataSource({
     "language": language
   };
 
-  print(requestBody);
+  // print(requestBody);
 
   if (googleUserId == null) {
     return const Left(SectionFailure(SectionErrorType.unexpectedError));
@@ -58,7 +58,8 @@ Future<Either<SectionFailure, CourseSectionModel>> getSectionsRemoteDataSource({
             encoding: Encoding.getByName("utf-8"))
         .timeout(const Duration(seconds: 60));
 
-      print(response.body);
+      // print(">>>>>>>>>>>>>>>>>>>>>>>Section<<<<<<<<<<<<<<<<<");
+      // print(response.body);
     if (response.statusCode == 200) {
       //Response is ok
       final body = response.body;

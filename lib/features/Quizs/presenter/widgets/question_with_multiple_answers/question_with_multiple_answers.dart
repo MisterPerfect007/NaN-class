@@ -6,8 +6,9 @@ import '../../../data/models/quiz_model.dart';
 
 class QuestionWithMultipleAnswers extends StatefulWidget {
   final Question question;
+  final void Function(List<String>, String) setQuestionAnswer;
   const QuestionWithMultipleAnswers({
-    Key? key, required this.question,
+    Key? key, required this.question, required this.setQuestionAnswer,
   }) : super(key: key);
 
   @override
@@ -28,6 +29,7 @@ class _QuestionWithMultipleAnswersState extends State<QuestionWithMultipleAnswer
         answers.add(answer);
       });
     }
+    widget.setQuestionAnswer(answers, widget.question.question);
   }
 
    

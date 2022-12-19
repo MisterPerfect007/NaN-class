@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/services.dart';
 
 class CourseSectionModel extends Equatable {
   final List<Section> sections;
@@ -74,13 +75,16 @@ class SectionQuiz extends Equatable {
     required this.isPass,
   });
 
-  factory SectionQuiz.fromJson(Map<String, dynamic> json) => SectionQuiz(
-      attempts: json["attempts"],
-      deductionPoints: json["deductionPoints"].toDouble(),
-      seconds: json["seconds"],
-      endTime: json["endTime"],
-      points: json["points"].toDouble(),
-      isPass: json["pass"]);
+  factory SectionQuiz.fromJson(Map<String, dynamic> json) {
+    print(">>>>>>>>>>>>>>>>>< json= $json");
+    return SectionQuiz(
+        attempts: json["attempts"],
+        deductionPoints: json["deductionPoints"].toDouble(),
+        seconds: json["seconds"],
+        endTime: json["endTime"],
+        points: json["points"].toDouble(),
+        isPass: json["pass"]);
+  }
 
   Map<String, dynamic> toJson() => {
         "attempts": attempts,

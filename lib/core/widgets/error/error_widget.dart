@@ -33,7 +33,7 @@ class CustomErrorWidget extends StatelessWidget {
             const SizedBox(height: 5),
             Text(msg, style: const TextStyle(color: AppColors.mainWhite),),
             const SizedBox(height: 10),
-            TextButton(
+            if(onPressed != null) TextButton(
               onPressed: onPressed,
               child: const Text(
                   "Try again"), /* style: TextButton.styleFrom(primarys: AppColors.mainGreen) */

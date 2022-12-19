@@ -77,3 +77,17 @@ Future showCustomDialog(
     ),
   );
 }
+
+//
+Future showLoadingDialog(BuildContext context) {
+  return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => const AlertDialog(
+            content: SizedBox(
+              width: 50,
+              height: 50,
+              child: Center(child: CircularProgressIndicator()),
+            ),
+          ));
+}

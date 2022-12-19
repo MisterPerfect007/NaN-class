@@ -30,9 +30,11 @@ class LoadedWidget extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 18, color: Colors.white.withOpacity(0.6)),
                 ),
-                Text(
-                  user.login ?? '',
-                  style: const TextStyle(fontSize: 18, color: Colors.white),
+                Expanded(
+                  child: Text(
+                    user.login ?? '',
+                    style: const TextStyle(fontSize: 18, color: Colors.white),
+                  ),
                 )
               ],
             ),

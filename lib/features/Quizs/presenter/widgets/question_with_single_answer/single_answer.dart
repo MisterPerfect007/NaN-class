@@ -25,8 +25,6 @@ class SingleAnswer extends StatelessWidget {
         child: InkWell(
           onTap: () {
             setAnswer(answer);
-
-            print("$answer . $selectedAnswer");
           },
           child: Container(
             padding: const EdgeInsets.all(10),

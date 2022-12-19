@@ -38,8 +38,6 @@ Future<Either<RequestFailure, QuizModel>> getQuizRemoteDataSource({
       },
     ).timeout(const Duration(seconds: 60));
 
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-    print(response.body);
 
     if (response.statusCode == 200) {
       //Response is ok

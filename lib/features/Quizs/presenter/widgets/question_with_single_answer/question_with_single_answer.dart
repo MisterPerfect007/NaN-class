@@ -6,9 +6,11 @@ import '../../../data/models/quiz_model.dart';
 
 class QuestionWithSingleAnswers extends StatefulWidget {
   final Question question;
+  final void Function(List<String>, String) setQuestionAnswer;
   const QuestionWithSingleAnswers({
     Key? key,
     required this.question,
+    required this.setQuestionAnswer,
   }) : super(key: key);
 
   @override
@@ -23,6 +25,7 @@ class _QuestionWithSingleAnswersState extends State<QuestionWithSingleAnswers> {
     setState(() {
       selectedAnswer = answer;
     });
+    widget.setQuestionAnswer([answer], widget.question.question);
   }
 
   @override
@@ -57,7 +60,6 @@ class _QuestionWithSingleAnswersState extends State<QuestionWithSingleAnswers> {
                     setAnswer: setAnswer,
                     selectedAnswer: selectedAnswer)),
           ),
-
         ],
       ),
     );
